@@ -1,0 +1,18 @@
+<div class="reg-card card">
+  <div class="kv">
+    <span class="kv-k">{{ 'portal.generic.label.status' | translate }}</span>
+    <span class="selo-status" [class.selo-status--ativo]="gatilho.status === 'ATIVO'" [class.selo-status--inativo]="gatilho.status === 'INATIVO'">
+      {{ tagStatus[gatilho.status] | translate }}
+    </span>
+  </div>
+
+  <div class="kv">
+    <span class="kv-k">{{ 'iclass.generic.label.description' | translate }}</span>
+    <span class="kv-v">{{ descricao }}</span>
+  </div>
+
+  <!-- Só o botão "Abrir" leva à página do gatilho -->
+  <a class="card__abrir" [routerLink]="['/object-trigger', gatilho.id]" [attr.aria-label]="gatilho.descricao">
+    <span class="pi pi-window-maximize" aria-hidden="true"></span>
+  </a>
+</div>

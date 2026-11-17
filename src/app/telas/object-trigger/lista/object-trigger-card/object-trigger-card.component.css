@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+/* Colunas: Status (estreita, como o "Código" das listas), Descrição e o ícone de abrir */
+.card {
+  grid-template-columns: 260px minmax(0, 1fr) 32px;
+}
+
+.card__abrir:focus-visible {
+  outline: 2px solid #3B82F655;
+  outline-offset: 2px;
+}
+
+.card__abrir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #1F2937;
+  text-decoration: none;
+  cursor: pointer;
+}

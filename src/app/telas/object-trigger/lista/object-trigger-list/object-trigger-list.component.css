@@ -1,0 +1,90 @@
+:host {
+  display: block;
+  min-height: 100%;
+  background: #FAFAFA;
+}
+
+.pagina__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 56px;
+  padding: 0 24px 0 28px;
+  box-sizing: border-box;
+}
+
+.pagina__titulo {
+  margin: 0;
+  color: #1E293B;
+}
+
+.pagina__botoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Filtros e ordenação: botão quadrado com o ícone no centro.
+   O btn--md tem padding e gap de 6px; o PrimeNG põe um ::after invisível ao lado do ícone,
+   e o gap entre os dois empurrava o ícone 3px para a esquerda. */
+.pagina__botoes .p-button.btn--icone {
+  width: 32px;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+}
+
+.pagina__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 6px 24px 24px 28px;
+}
+
+.paineis {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+/* Os dois campos de ordenação não precisam da largura toda */
+.ordenacao {
+  max-width: 520px;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vazio__icone {
+  font-size: 24px;
+  color: #94A3B8;
+}
+
+/* Skeleton com as mesmas colunas do card */
+.esqueleto {
+  grid-template-columns: 260px minmax(0, 1fr) 32px;
+  height: 54px;
+}
+
+.esqueleto .kv {
+  gap: 6px;
+}
+
+.esqueleto__rotulo {
+  width: 64px;
+  height: 12px;
+}
+
+.esqueleto__valor {
+  width: 72px;
+  height: 14px;
+}
+
+.esqueleto__valor--largo {
+  width: 260px;
+}

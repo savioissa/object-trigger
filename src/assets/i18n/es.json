@@ -1,1 +1,143 @@
-{}
+{
+  "dateFormat": "dd/mm/yy",
+  "dayNamesMin": {
+    "0": "D",
+    "1": "L",
+    "2": "M",
+    "3": "M",
+    "4": "J",
+    "5": "V",
+    "6": "S"
+  },
+  "firstDayOfWeek": "1",
+  "iclass": {
+    "generic": {
+      "label": {
+        "copied-to-clipboard": "Copiado al portapapeles",
+        "description": "Descripción",
+        "discard-changes": "Descartar cambios",
+        "select-operator": "Operador"
+      }
+    }
+  },
+  "monthNames": {
+    "0": "Enero",
+    "1": "Febrero",
+    "2": "Marzo",
+    "3": "Abril",
+    "4": "Mayo",
+    "5": "Junio",
+    "6": "Julio",
+    "7": "Agosto",
+    "8": "Septiembre",
+    "9": "Octubre",
+    "10": "Noviembre",
+    "11": "Diciembre"
+  },
+  "monthNamesShort": {
+    "0": "Ene",
+    "1": "Feb",
+    "2": "Mar",
+    "3": "Abr",
+    "4": "May",
+    "5": "Jun",
+    "6": "Jul",
+    "7": "Ago",
+    "8": "Sep",
+    "9": "Oct",
+    "10": "Nov",
+    "11": "Dic"
+  },
+  "portal": {
+    "createso": {
+      "placeholder": {
+        "find-category": "Seleccione una categoría"
+      }
+    },
+    "generic": {
+      "button": {
+        "cancel": "Cancelar",
+        "create": "Crear",
+        "discard": "Descartar",
+        "edit": "Editar",
+        "refresh": "Actualizar",
+        "save": "Guardar"
+      },
+      "label": {
+        "actions": "Acciones",
+        "active": "Activo",
+        "add-action": "Agregar acción",
+        "add-condition": "Agregar condición",
+        "all-changes-saved": "Todos los cambios han sido guardados",
+        "all-conditions-satisfied": "Todas las condiciones deben ser satisfechas",
+        "any-condition-satisfied": "Cualquier condición debe ser satisfecha.",
+        "ascending": "Ascendente",
+        "available-placeholders": "Placeholders disponibles",
+        "category": "Categoría",
+        "conditions": "Condiciones",
+        "conditions-set-trigger-execution": "Las condiciones determinan cuándo debe ejecutarse un disparador",
+        "copied": "Copiado",
+        "copy-placeholder-manually": "Seleccione el código del placeholder y cópielo manualmente.",
+        "define-trigger-actions": "Qué sucede cuando se cumplen las condiciones.",
+        "descending": "Descendente",
+        "empty-trigger-list": "Ningún disparador registrado",
+        "equal": "Igual a",
+        "error-creating-trigger": "Error al crear el disparador",
+        "error-loading-data": "Error al cargar los datos",
+        "error-saving-trigger": "Error al guardar el disparador",
+        "get-webhook": "Llamar webhook",
+        "greater-than": "Mayor que",
+        "inactive": "Inactivo",
+        "invalid-json": "JSON inválido. Verifique comillas, comas y llaves.",
+        "less-than": "Menor que",
+        "method": "Método",
+        "new": "Nuevo",
+        "new-trigger": "Nuevo Disparador",
+        "no-actions": "Ninguna acción",
+        "no-conditions": "Ninguna condición",
+        "no-keep-editing": "No, seguir editando",
+        "notes": "Observación",
+        "operator-absent": "Ausente",
+        "operator-changed": "Modificado",
+        "operator-changed-from": "Modificado de",
+        "operator-changed-to": "Modificado a",
+        "operator-different": "Diferente",
+        "operator-not-changed": "No modificado",
+        "operator-not-changed-from": "No modificado de",
+        "operator-not-changed-to": "No modificado a",
+        "operator-present": "Presente",
+        "request-body-json": "Cuerpo de la solicitud (JSON)",
+        "required-field": "Campo obligatorio.",
+        "select": "Elegir",
+        "sort-by": "Ordenar por",
+        "status": "Estado",
+        "trigger": "Disparador",
+        "trigger-created": "Disparador creado",
+        "trigger-created-successfully": "El disparador se creó con éxito",
+        "triggers": "Disparadores",
+        "type": "Tipo",
+        "unable-create-trigger": "No fue posible crear el disparador. Inténtelo de nuevo.",
+        "unable-load-form-options": "No fue posible cargar las opciones del formulario.",
+        "unable-load-triggers": "No fue posible cargar los disparadores. Por favor, inténtelo de nuevo.",
+        "unable-save-trigger": "No fue posible guardar el disparador. Inténtelo de nuevo.",
+        "unable-to-copy": "No fue posible copiar",
+        "unsaved-changes-will-be-lost": "Hay cambios sin guardar. Si sale ahora, se perderán.",
+        "url": "URL",
+        "value": "Valor",
+        "view-available-placeholders": "Ver placeholders disponibles"
+      },
+      "placeholder": {
+        "number-value": "0",
+        "search": "Buscar",
+        "select-category-first": "Elija la categoría primero",
+        "select-value": "Seleccione el valor",
+        "select-webhook": "Seleccione el webhook",
+        "trigger-description": "Ej.: Avisar al cliente cuando se complete la OS",
+        "trigger-notes": "Notas internas sobre este disparador (opcional)",
+        "type-value": "Ingrese el valor",
+        "value-not-applicable": "No se aplica a este operador"
+      },
+      "results-not-found": "Ningún resultado encontrado"
+    }
+  }
+}

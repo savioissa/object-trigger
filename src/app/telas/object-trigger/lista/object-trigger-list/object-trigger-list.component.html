@@ -1,0 +1,135 @@
+<header class="pagina__cabecalho">
+  <h1 class="t-title-lg pagina__titulo">{{ 'portal.generic.label.triggers' | translate }}</h1>
+
+  <div class="pagina__botoes">
+    <button
+      pButton
+      type="button"
+      routerLink="/object-trigger/novo"
+      icon="pi pi-plus"
+      class="btn--md btn--secondary header-btn"
+      [label]="'portal.generic.label.new' | translate"
+    ></button>
+
+    <span [class.is-active]="filtrosAbertos">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-filter"
+        class="btn--md btn--neutral header-btn btn--icone"
+        [attr.aria-expanded]="filtrosAbertos"
+        (click)="alternarFiltros()"
+      ></button>
+    </span>
+
+    <span [class.is-active]="ordenacaoAberta">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-sort-amount-down"
+        class="btn--md btn--neutral header-btn btn--icone"
+        [attr.aria-expanded]="ordenacaoAberta"
+        (click)="alternarOrdenacao()"
+      ></button>
+    </span>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-refresh"
+      class="btn--md btn--primary header-btn"
+      [label]="'portal.generic.button.refresh' | translate"
+      [loading]="carregando"
+      [disabled]="carregando"
+      (click)="carregar()"
+    ></button>
+  </div>
+</header>
+
+<div class="pagina__conteudo">
+  @if (filtrosAbertos || ordenacaoAberta) {
+    <div class="paineis">
+      @if (filtrosAbertos) {
+        <app-object-trigger-filter [filtro]="filtro" (filtroChange)="aoMudarFiltro($event)" />
+      }
+
+      @if (ordenacaoAberta) {
+        <div class="sort-panel">
+          <span class="sort-panel__label" id="object-trigger-ordenar-por">{{ 'portal.generic.label.sort-by' | translate }}</span>
+          <div class="sort-panel__control ordenacao" role="group" aria-labelledby="object-trigger-ordenar-por">
+            <div class="sort-panel__field">
+              <p-dropdown
+                [options]="camposOrdenacao"
+                [(ngModel)]="campoOrdenacao"
+                (ngModelChange)="aoMudarCriterio()"
+                appendTo="body"
+                styleClass="sort-panel__select"
+                panelStyleClass="sort-panel__select-panel"
+              >
+                <ng-template pTemplate="selectedItem" let-campo>{{ tagCampo[campo] | translate }}</ng-template>
+                <ng-template pTemplate="item" let-campo>{{ tagCampo[campo] | translate }}</ng-template>
+              </p-dropdown>
+            </div>
+            <div class="sort-panel__field">
+              <p-dropdown
+                [options]="direcoes"
+                [(ngModel)]="direcaoOrdenacao"
+                (ngModelChange)="aoMudarCriterio()"
+                appendTo="body"
+                styleClass="sort-panel__select"
+                panelStyleClass="sort-panel__select-panel"
+              >
+                <ng-template pTemplate="selectedItem" let-direcao>{{ tagDirecao[direcao] | translate }}</ng-template>
+                <ng-template pTemplate="item" let-direcao>{{ tagDirecao[direcao] | translate }}</ng-template>
+              </p-dropdown>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (carregando) {
+    <div class="lista" aria-busy="true">
+      @for (i of esqueletos; track i) {
+        <div class="reg-card esqueleto" aria-hidden="true">
+          <div class="kv">
+            <div class="skeleton esqueleto__rotulo"></div>
+            <div class="skeleton esqueleto__valor"></div>
+          </div>
+          <div class="kv">
+            <div class="skeleton esqueleto__rotulo"></div>
+            <div class="skeleton esqueleto__valor esqueleto__valor--largo"></div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (!carregou) {
+    <!-- A primeira busca falhou: só o toast de erro -->
+  } @else if (gatilhos.length === 0) {
+    <div class="req-empty">
+      <i class="pi pi-folder-open vazio__icone" aria-hidden="true"></i>
+      <p>{{ 'portal.generic.label.empty-trigger-list' | translate }}</p>
+    </div>
+  } @else if (filtrados.length === 0) {
+    <div class="req-empty">
+      <i class="pi pi-search vazio__icone" aria-hidden="true"></i>
+      <p>{{ 'portal.generic.results-not-found' | translate }}</p>
+    </div>
+  } @else {
+    <div class="lista">
+      @for (gatilho of pagina; track gatilho.id) {
+        <app-object-trigger-card [gatilho]="gatilho" />
+      }
+    </div>
+
+    <p-paginator
+      [first]="primeiro"
+      [rows]="porPagina"
+      [totalRecords]="filtrados.length"
+      [pageLinkSize]="5"
+      styleClass="paginator--md"
+      (onPageChange)="aoMudarPagina($event)"
+    />
+  }
+</div>

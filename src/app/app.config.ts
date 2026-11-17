@@ -4,7 +4,7 @@ import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule, TranslateParser } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
 import { comExibirTags } from './prototipador/principal/carregador-com-tags';
@@ -21,6 +21,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     // MessageService na raiz: um único <p-toast> (no AppComponent) atende todas as telas
     MessageService,
+    // Confirmações (ex.: sair com alterações não salvas); um único <p-confirmDialog> no AppComponent
+    ConfirmationService,
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'pt',

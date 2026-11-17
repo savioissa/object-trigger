@@ -15,6 +15,7 @@
   },
   "planilha": {
     "arquivo": "src/app/prototipador/entrada/tags.csv",
-    "colunaChave": "Tag"
+    "colunaChave": "Tag",
+    "origem": "/home/sbarbosa/Área de trabalho/Projetos/Planilha I18N - Página1.csv"
   }
 }

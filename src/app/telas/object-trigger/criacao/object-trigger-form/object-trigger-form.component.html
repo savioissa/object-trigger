@@ -1,0 +1,31 @@
+<header class="pagina__cabecalho">
+  <h1 class="t-title-lg pagina__titulo">{{ 'portal.generic.label.new-trigger' | translate }}</h1>
+
+  <div class="pagina__botoes">
+    <button
+      pButton
+      type="button"
+      class="btn--md btn--neutral"
+      [label]="'portal.generic.button.cancel' | translate"
+      (click)="cancelar()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      class="btn--md btn--primary"
+      [label]="'portal.generic.button.create' | translate"
+      [loading]="salvando"
+      [disabled]="!podeCriar || salvando"
+      (click)="criar()"
+    ></button>
+  </div>
+</header>
+
+<app-object-trigger-fields
+  [form]="form"
+  [categorias]="categorias"
+  [webhooks]="webhooks"
+  [placeholders]="placeholders"
+  [carregando]="carregando"
+/>

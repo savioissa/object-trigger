@@ -1,0 +1,66 @@
+<header class="pagina__cabecalho">
+  <div class="pagina__identificacao">
+    <a class="pagina__voltar" routerLink="/object-trigger" [attr.aria-label]="'portal.generic.label.triggers' | translate">
+      <span class="pi pi-chevron-left" aria-hidden="true"></span>
+    </a>
+
+    <div class="pagina__textos">
+      <span class="pagina__objeto">{{ 'portal.generic.label.trigger' | translate }}</span>
+      @if (carregando) {
+        <div class="skeleton pagina__titulo-esqueleto" aria-hidden="true"></div>
+      } @else if (gatilho) {
+        <h1 class="pagina__titulo">{{ gatilho.descricao }}</h1>
+      }
+    </div>
+  </div>
+</header>
+
+<!-- Ações da página: à direita, abaixo do cabeçalho e acima dos campos -->
+@if (!carregando && gatilho) {
+  <div class="pagina__botoes">
+    @if (editando) {
+      <button
+        pButton
+        type="button"
+        class="btn--md btn--neutral"
+        [label]="'portal.generic.button.cancel' | translate"
+        [disabled]="salvando"
+        (click)="cancelar()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        class="btn--md btn--primary"
+        [label]="'portal.generic.button.save' | translate"
+        [loading]="salvando"
+        [disabled]="!podeSalvar"
+        (click)="salvar()"
+      ></button>
+    } @else {
+      <button
+        pButton
+        type="button"
+        icon="pi pi-pencil"
+        class="btn--md btn--primary"
+        [label]="'portal.generic.button.edit' | translate"
+        (click)="editar()"
+      ></button>
+    }
+  </div>
+}
+
+@if (!carregando && !gatilho) {
+  <div class="req-empty">
+    <i class="pi pi-search pagina__vazio-icone" aria-hidden="true"></i>
+    <p>{{ 'portal.generic.results-not-found' | translate }}</p>
+  </div>
+} @else {
+  <app-object-trigger-fields
+    [form]="form"
+    [categorias]="categorias"
+    [webhooks]="webhooks"
+    [placeholders]="placeholders"
+    [carregando]="carregando"
+    [somenteLeitura]="!editando"
+  />
+}

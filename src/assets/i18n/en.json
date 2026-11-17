@@ -1,1 +1,143 @@
-{}
+{
+  "dateFormat": "mm/dd/yy",
+  "dayNamesMin": {
+    "0": "Su",
+    "1": "Mo",
+    "2": "Tu",
+    "3": "We",
+    "4": "Th",
+    "5": "Fr",
+    "6": "Sa"
+  },
+  "firstDayOfWeek": "0",
+  "iclass": {
+    "generic": {
+      "label": {
+        "copied-to-clipboard": "Copied to clipboard",
+        "description": "Description",
+        "discard-changes": "Discard changes",
+        "select-operator": "Operator"
+      }
+    }
+  },
+  "monthNames": {
+    "0": "January",
+    "1": "February",
+    "2": "March",
+    "3": "April",
+    "4": "May",
+    "5": "June",
+    "6": "July",
+    "7": "August",
+    "8": "September",
+    "9": "October",
+    "10": "November",
+    "11": "December"
+  },
+  "monthNamesShort": {
+    "0": "Jan",
+    "1": "Feb",
+    "2": "Mar",
+    "3": "Apr",
+    "4": "May",
+    "5": "Jun",
+    "6": "Jul",
+    "7": "Aug",
+    "8": "Sep",
+    "9": "Oct",
+    "10": "Nov",
+    "11": "Dec"
+  },
+  "portal": {
+    "createso": {
+      "placeholder": {
+        "find-category": "Please select a category"
+      }
+    },
+    "generic": {
+      "button": {
+        "cancel": "Cancel",
+        "create": "Create",
+        "discard": "Discard",
+        "edit": "Edit",
+        "refresh": "Refresh",
+        "save": "Save"
+      },
+      "label": {
+        "actions": "Actions",
+        "active": "Active",
+        "add-action": "Add action",
+        "add-condition": "Add condition",
+        "all-changes-saved": "All changes have been saved",
+        "all-conditions-satisfied": "All conditions must be satisfied",
+        "any-condition-satisfied": "Any condition must be satisfied",
+        "ascending": "Ascending",
+        "available-placeholders": "Available placeholders",
+        "category": "Category",
+        "conditions": "Conditions",
+        "conditions-set-trigger-execution": "The conditions determine when a trigger should be executed",
+        "copied": "Copied",
+        "copy-placeholder-manually": "Select the placeholder code and copy it manually.",
+        "define-trigger-actions": "What happens when the conditions are met.",
+        "descending": "Descending",
+        "empty-trigger-list": "No triggers registered",
+        "equal": "Equal to",
+        "error-creating-trigger": "Error creating trigger",
+        "error-loading-data": "Error loading data",
+        "error-saving-trigger": "Error saving trigger",
+        "get-webhook": "Call webhook",
+        "greater-than": "Greater than",
+        "inactive": "Inactive",
+        "invalid-json": "Invalid JSON. Check quotes, commas and braces.",
+        "less-than": "Less than",
+        "method": "Method",
+        "new": "New",
+        "new-trigger": "New Trigger",
+        "no-actions": "No actions",
+        "no-conditions": "No conditions",
+        "no-keep-editing": "No, continue editing",
+        "notes": "Notes",
+        "operator-absent": "Absent",
+        "operator-changed": "Changed",
+        "operator-changed-from": "Changed from",
+        "operator-changed-to": "Changed to",
+        "operator-different": "Not equal",
+        "operator-not-changed": "Not changed",
+        "operator-not-changed-from": "Not changed from",
+        "operator-not-changed-to": "Not changed to",
+        "operator-present": "Present",
+        "request-body-json": "Request body (JSON)",
+        "required-field": "Required field.",
+        "select": "Select",
+        "sort-by": "Sort by",
+        "status": "Status",
+        "trigger": "Trigger",
+        "trigger-created": "Trigger created",
+        "trigger-created-successfully": "The trigger was created successfully",
+        "triggers": "Triggers",
+        "type": "Type",
+        "unable-create-trigger": "Could not create the trigger. Please try again.",
+        "unable-load-form-options": "Could not load the form options.",
+        "unable-load-triggers": "Could not load the triggers. Please try again.",
+        "unable-save-trigger": "Could not save the trigger. Please try again.",
+        "unable-to-copy": "Could not copy",
+        "unsaved-changes-will-be-lost": "There are unsaved changes. If you leave now, they will be lost.",
+        "url": "URL",
+        "value": "Value",
+        "view-available-placeholders": "View available placeholders"
+      },
+      "placeholder": {
+        "number-value": "0",
+        "search": "Search",
+        "select-category-first": "Choose the category first",
+        "select-value": "Select the value",
+        "select-webhook": "Select the webhook",
+        "trigger-description": "E.g.: Notify the customer when the SO is completed",
+        "trigger-notes": "Internal notes about this trigger (optional)",
+        "type-value": "Enter the value",
+        "value-not-applicable": "Not applicable to this operator"
+      },
+      "results-not-found": "No results found"
+    }
+  }
+}

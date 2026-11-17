@@ -1,0 +1,163 @@
+@if (carregando) {
+  <div class="pagina__conteudo" aria-busy="true">
+    <div aria-hidden="true">
+      <div class="dados">
+        <div class="esqueleto__campo">
+          <div class="skeleton esqueleto__rotulo"></div>
+          <div class="skeleton esqueleto__input"></div>
+        </div>
+        <div class="esqueleto__campo">
+          <div class="skeleton esqueleto__rotulo"></div>
+          <div class="skeleton esqueleto__input"></div>
+        </div>
+        <div class="esqueleto__campo dados__largo">
+          <div class="skeleton esqueleto__rotulo"></div>
+          <div class="skeleton esqueleto__textarea"></div>
+        </div>
+      </div>
+
+      <hr class="divisor" />
+
+      <div class="secao">
+        <div class="secao__cabecalho">
+          <div class="skeleton esqueleto__titulo"></div>
+          <div class="skeleton esqueleto__subtitulo"></div>
+        </div>
+        <div class="skeleton esqueleto__bloco"></div>
+        <div class="skeleton esqueleto__bloco"></div>
+      </div>
+
+      <hr class="divisor" />
+
+      <div class="secao">
+        <div class="secao__cabecalho">
+          <div class="skeleton esqueleto__titulo"></div>
+          <div class="skeleton esqueleto__subtitulo"></div>
+        </div>
+        <div class="skeleton esqueleto__bloco"></div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="pagina__conteudo" [formGroup]="form">
+    <!-- Dados gerais -->
+    <div class="dados">
+      <div class="form-field">
+        <label class="form-label" [for]="uid + '-descricao'">
+          {{ 'iclass.generic.label.description' | translate }}<span class="form-label__required" aria-hidden="true">*</span>
+        </label>
+        <input
+          pInputText
+          [id]="uid + '-descricao'"
+          type="text"
+          class="campo"
+          formControlName="descricao"
+          [class.campo--invalido]="exibirErro(form.controls.descricao)"
+          [attr.aria-describedby]="exibirErro(form.controls.descricao) ? uid + '-descricao-erro' : null"
+          [placeholder]="'portal.generic.placeholder.trigger-description' | translate"
+        />
+        @if (exibirErro(form.controls.descricao)) {
+          <p class="form-error" [id]="uid + '-descricao-erro'">{{ 'portal.generic.label.required-field' | translate }}</p>
+        }
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" [for]="uid + '-status'">{{ 'portal.generic.label.status' | translate }}</label>
+        <p-dropdown
+          [inputId]="uid + '-status'"
+          formControlName="status"
+          [options]="statusOpcoes"
+          appendTo="body"
+          styleClass="campo"
+          panelStyleClass="campo-painel"
+        >
+          <ng-template pTemplate="selectedItem" let-status>{{ tagStatus[status] | translate }}</ng-template>
+          <ng-template pTemplate="item" let-status>{{ tagStatus[status] | translate }}</ng-template>
+        </p-dropdown>
+      </div>
+
+      <div class="form-field dados__largo">
+        <label class="form-label" [for]="uid + '-observacoes'">{{ 'portal.generic.label.notes' | translate }}</label>
+        <textarea
+          pInputTextarea
+          [id]="uid + '-observacoes'"
+          rows="3"
+          class="campo-textarea"
+          formControlName="observacoes"
+          [placeholder]="'portal.generic.placeholder.trigger-notes' | translate"
+        ></textarea>
+      </div>
+    </div>
+
+    <hr class="divisor" />
+
+    <!-- Condições -->
+    <section class="secao" [attr.aria-labelledby]="uid + '-condicoes-titulo'">
+      <div class="secao__cabecalho">
+        <h2 class="t-title-sm secao__titulo" [id]="uid + '-condicoes-titulo'">{{ 'portal.generic.label.conditions' | translate }}</h2>
+        <p class="secao__subtitulo">{{ 'portal.generic.label.conditions-set-trigger-execution' | translate }}</p>
+      </div>
+
+      <app-object-trigger-condition-group
+        [titulo]="'portal.generic.label.all-conditions-satisfied' | translate"
+        [condicoes]="form.controls.todas"
+        [gruposCategoria]="categorias"
+        [somenteLeitura]="somenteLeitura"
+      />
+      <app-object-trigger-condition-group
+        [titulo]="'portal.generic.label.any-condition-satisfied' | translate"
+        [condicoes]="form.controls.qualquer"
+        [gruposCategoria]="categorias"
+        [somenteLeitura]="somenteLeitura"
+      />
+    </section>
+
+    <hr class="divisor" />
+
+    <!-- Ações -->
+    <section class="secao" [attr.aria-labelledby]="uid + '-acoes-titulo'">
+      <div class="secao__cabecalho">
+        <h2 class="t-title-sm secao__titulo" [id]="uid + '-acoes-titulo'">{{ 'portal.generic.label.actions' | translate }}</h2>
+        <p class="secao__subtitulo">{{ 'portal.generic.label.define-trigger-actions' | translate }}</p>
+      </div>
+
+      <div class="acoes" [class.acoes--com-painel]="painelAberto">
+        <div class="acoes__lista">
+          @for (acao of form.controls.acoes.controls; track acao; let i = $index) {
+            <app-object-trigger-action
+              [form]="acao"
+              [webhooks]="webhooks"
+              [somenteLeitura]="somenteLeitura"
+              (remover)="removerAcao(i)"
+              (verPlaceholders)="painelAberto = true"
+            />
+          }
+          @if (somenteLeitura) {
+            @if (!form.controls.acoes.length) {
+              <p class="acoes__vazio">{{ 'portal.generic.label.no-actions' | translate }}</p>
+            }
+          } @else {
+            <div>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-plus"
+                class="btn--dashed"
+                [label]="'portal.generic.label.add-action' | translate"
+                (click)="adicionarAcao()"
+              ></button>
+            </div>
+          }
+        </div>
+
+        @if (painelAberto && !somenteLeitura) {
+          <app-object-trigger-placeholders-panel
+            class="acoes__painel"
+            [grupos]="placeholders"
+            (fechar)="painelAberto = false"
+          />
+        }
+      </div>
+    </section>
+  </div>
+}

@@ -1,0 +1,101 @@
+:host {
+  --cabecalho-altura: 72px;
+  display: block;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.pagina__cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--cabecalho-altura);
+  padding: 0 28px;
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  box-sizing: border-box;
+}
+
+.pagina__identificacao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Voltar: só o ícone, em azul */
+.pagina__voltar {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  color: #2563EB;
+  text-decoration: none;
+}
+
+.pagina__voltar .pi {
+  font-size: 16px;
+}
+
+.pagina__voltar:hover {
+  color: #1D4ED8;
+}
+
+.pagina__voltar:focus-visible {
+  outline: 2px solid #3B82F655;
+  outline-offset: 2px;
+}
+
+.pagina__textos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* Nome do objeto, em azul, acima da descrição */
+.pagina__objeto {
+  font: var(--label-field);
+  color: #2563EB;
+}
+
+.pagina__titulo {
+  min-width: 0;
+  margin: 0;
+  font: 600 20px/28px var(--font-family-text);
+  letter-spacing: -.01em;
+  overflow: hidden;
+  color: #1E293B;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pagina__titulo-esqueleto {
+  width: 320px;
+  height: 24px;
+}
+
+/* Editar (ou Cancelar e Salvar): à direita, entre o cabeçalho e os campos */
+.pagina__botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 20px 28px 0;
+}
+
+/* Os campos já têm 28px de margem no topo; com a barra de ações acima, basta menos */
+.pagina__botoes + app-object-trigger-fields {
+  margin-top: -12px;
+}
+
+.pagina__vazio-icone {
+  font-size: 24px;
+  color: #94A3B8;
+}
