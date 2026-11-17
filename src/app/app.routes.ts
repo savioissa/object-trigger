@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { comPrototipador } from './prototipador/rotas';
+
 /**
  * Rotas das telas do protótipo. Cada tela nova entra aqui.
  * Exemplo:
@@ -7,4 +9,4 @@ import { Routes } from '@angular/router';
  */
 export const rotasDasTelas: Routes = [];
 
-export const routes: Routes = rotasDasTelas;
+export const routes: Routes = comPrototipador(rotasDasTelas);

@@ -7,6 +7,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
+import { comExibirTags } from './prototipador/principal/carregador-com-tags';
 import { ParserPosicional } from './traducao/parser-posicional';
 
 export function criarCarregadorDeTraducoes(http: HttpClient): TranslateLoader {
@@ -25,7 +26,7 @@ export const appConfig: ApplicationConfig = {
         defaultLanguage: 'pt',
         loader: {
           provide: TranslateLoader,
-          useFactory: criarCarregadorDeTraducoes,
+          useFactory: (http: HttpClient) => comExibirTags(criarCarregadorDeTraducoes(http)),
           deps: [HttpClient],
         },
         // Tags da planilha usam parâmetros posicionais: {0}, {1}
