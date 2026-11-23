@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { ChipModule } from 'primeng/chip';
 
 import { ObjectTrigger, TAG_STATUS } from '../../object-trigger.model';
 
@@ -12,7 +13,7 @@ const LIMITE_DESCRICAO = 50;
   selector: 'app-object-trigger-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, TranslateModule],
+  imports: [RouterLink, TranslateModule, ChipModule],
   templateUrl: './object-trigger-card.component.html',
   styleUrl: './object-trigger-card.component.css'
 })

@@ -213,8 +213,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'CONCLUIDA'
+          operador: 'IGUAL',
+          valor: 'CONCLUIDA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -236,8 +237,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ENCERRADA'
+          operador: 'IGUAL',
+          valor: 'ENCERRADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -259,8 +261,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'AGENDADA'
+          operador: 'IGUAL',
+          valor: 'AGENDADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -282,8 +285,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'APROVACAO'
+          operador: 'IGUAL',
+          valor: 'APROVACAO',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -305,8 +309,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'DESLOCAMENTO'
+          operador: 'IGUAL',
+          valor: 'DESLOCAMENTO',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -328,8 +333,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'DESPACHADA'
+          operador: 'IGUAL',
+          valor: 'DESPACHADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -351,8 +357,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'PARALISADA'
+          operador: 'IGUAL',
+          valor: 'PARALISADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -374,8 +381,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ENCERRADA'
+          operador: 'IGUAL',
+          valor: 'ENCERRADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -397,8 +405,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ATENDIMENTO'
+          operador: 'IGUAL',
+          valor: 'ATENDIMENTO',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -420,8 +429,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ABERTA'
+          operador: 'IGUAL',
+          valor: 'ABERTA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -443,8 +453,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'VINCULADA_CREDENCIADA'
+          operador: 'IGUAL',
+          valor: 'VINCULADA_CREDENCIADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -466,8 +477,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'SUPORTE'
+          operador: 'IGUAL',
+          valor: 'SUPORTE',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -489,8 +501,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'PRE_ABERTA'
+          operador: 'IGUAL',
+          valor: 'PRE_ABERTA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -512,8 +525,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'FILA_TECNICO'
+          operador: 'IGUAL',
+          valor: 'FILA_TECNICO',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -535,8 +549,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'EM_ANALISE'
+          operador: 'IGUAL',
+          valor: 'EM_ANALISE',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -558,8 +573,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'AGENDADA'
+          operador: 'IGUAL',
+          valor: 'AGENDADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -581,8 +597,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'CONCLUIDA'
+          operador: 'IGUAL',
+          valor: 'CONCLUIDA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -604,8 +621,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ABERTA'
+          operador: 'IGUAL',
+          valor: 'ABERTA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -627,8 +645,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'AGENDADA'
+          operador: 'IGUAL',
+          valor: 'AGENDADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -650,8 +669,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'CONCLUIDA'
+          operador: 'IGUAL',
+          valor: 'CONCLUIDA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -673,8 +693,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'APROVACAO'
+          operador: 'IGUAL',
+          valor: 'APROVACAO',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -696,8 +717,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'DESLOCAMENTO'
+          operador: 'IGUAL',
+          valor: 'DESLOCAMENTO',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -719,8 +741,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'CONCLUIDA'
+          operador: 'IGUAL',
+          valor: 'CONCLUIDA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -742,8 +765,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'EM_ANALISE'
+          operador: 'IGUAL',
+          valor: 'EM_ANALISE',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -765,8 +789,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ENCERRADA'
+          operador: 'IGUAL',
+          valor: 'ENCERRADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -788,8 +813,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'PARALISADA'
+          operador: 'IGUAL',
+          valor: 'PARALISADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -811,8 +837,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ABERTA'
+          operador: 'IGUAL',
+          valor: 'ABERTA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -834,8 +861,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'DESPACHADA'
+          operador: 'IGUAL',
+          valor: 'DESPACHADA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -857,8 +885,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'CONCLUIDA'
+          operador: 'IGUAL',
+          valor: 'CONCLUIDA',
+          valorFim: null
         }
       ],
       qualquer: []
@@ -880,8 +909,9 @@ export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
       todas: [
         {
           categoriaId: 'os.status',
-          operador: 'ALTERADO_PARA',
-          valor: 'ATENDIMENTO'
+          operador: 'IGUAL',
+          valor: 'ATENDIMENTO',
+          valorFim: null
         }
       ],
       qualquer: []

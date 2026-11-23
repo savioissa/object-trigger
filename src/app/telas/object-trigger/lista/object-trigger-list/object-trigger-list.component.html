@@ -1,33 +1,34 @@
-<header class="pagina__cabecalho">
-  <h1 class="t-title-lg pagina__titulo">{{ 'portal.generic.label.triggers' | translate }}</h1>
+<header class="page-header">
+  <h1 class="page-header__title">{{ 'portal.generic.label.triggers' | translate }}</h1>
 
-  <div class="pagina__botoes">
+  <div class="page-header__actions">
     <button
       pButton
       type="button"
       routerLink="/object-trigger/novo"
       icon="pi pi-plus"
-      class="btn--md btn--secondary header-btn"
+      class="btn--md btn--primary header-btn"
       [label]="'portal.generic.label.new' | translate"
     ></button>
 
-    <span [class.is-active]="filtrosAbertos">
+    <!-- filter-toggle-active estiliza o .p-button de dentro: fica no elemento que envolve o botão, com o painel aberto -->
+    <span class="flex" [class.filter-toggle-active]="filtrosAbertos">
       <button
         pButton
         type="button"
         icon="pi pi-filter"
-        class="btn--md btn--neutral header-btn btn--icone"
+        class="btn--md btn--neutral header-btn"
         [attr.aria-expanded]="filtrosAbertos"
         (click)="alternarFiltros()"
       ></button>
     </span>
 
-    <span [class.is-active]="ordenacaoAberta">
+    <span class="flex" [class.filter-toggle-active]="ordenacaoAberta">
       <button
         pButton
         type="button"
         icon="pi pi-sort-amount-down"
-        class="btn--md btn--neutral header-btn btn--icone"
+        class="btn--md btn--neutral header-btn"
         [attr.aria-expanded]="ordenacaoAberta"
         (click)="alternarOrdenacao()"
       ></button>
@@ -46,38 +47,38 @@
   </div>
 </header>
 
-<div class="pagina__conteudo">
+<div class="page-content">
   @if (filtrosAbertos || ordenacaoAberta) {
-    <div class="paineis">
+    <div class="list-stack">
       @if (filtrosAbertos) {
         <app-object-trigger-filter [filtro]="filtro" (filtroChange)="aoMudarFiltro($event)" />
       }
 
       @if (ordenacaoAberta) {
-        <div class="sort-panel">
-          <span class="sort-panel__label" id="object-trigger-ordenar-por">{{ 'portal.generic.label.sort-by' | translate }}</span>
-          <div class="sort-panel__control ordenacao" role="group" aria-labelledby="object-trigger-ordenar-por">
-            <div class="sort-panel__field">
+        <div class="div-filter flex flex-column gap-1">
+          <span class="t-label-field" id="object-trigger-ordenar-por">{{ 'portal.generic.label.sort-by' | translate }}</span>
+          <div class="flex align-items-center gap-2 max-w-30rem" role="group" aria-labelledby="object-trigger-ordenar-por">
+            <div class="flex-1 min-w-0">
               <p-dropdown
+                class="filter-panel__operator"
                 [options]="camposOrdenacao"
                 [(ngModel)]="campoOrdenacao"
                 (ngModelChange)="aoMudarCriterio()"
                 appendTo="body"
-                styleClass="sort-panel__select"
-                panelStyleClass="sort-panel__select-panel"
+                panelStyleClass="filter-panel__operator-panel"
               >
                 <ng-template pTemplate="selectedItem" let-campo>{{ tagCampo[campo] | translate }}</ng-template>
                 <ng-template pTemplate="item" let-campo>{{ tagCampo[campo] | translate }}</ng-template>
               </p-dropdown>
             </div>
-            <div class="sort-panel__field">
+            <div class="flex-1 min-w-0">
               <p-dropdown
+                class="filter-panel__operator"
                 [options]="direcoes"
                 [(ngModel)]="direcaoOrdenacao"
                 (ngModelChange)="aoMudarCriterio()"
                 appendTo="body"
-                styleClass="sort-panel__select"
-                panelStyleClass="sort-panel__select-panel"
+                panelStyleClass="filter-panel__operator-panel"
               >
                 <ng-template pTemplate="selectedItem" let-direcao>{{ tagDirecao[direcao] | translate }}</ng-template>
                 <ng-template pTemplate="item" let-direcao>{{ tagDirecao[direcao] | translate }}</ng-template>
@@ -90,16 +91,15 @@
   }
 
   @if (carregando) {
-    <div class="lista" aria-busy="true">
+    <div class="list-stack" aria-busy="true">
       @for (i of esqueletos; track i) {
-        <div class="reg-card esqueleto" aria-hidden="true">
-          <div class="kv">
-            <div class="skeleton esqueleto__rotulo"></div>
-            <div class="skeleton esqueleto__valor"></div>
+        <div class="reg-card flex align-items-center gap-3 px-3 py-3" aria-hidden="true">
+          <div class="w-16rem flex-shrink-0 flex">
+            <p-skeleton width="72px" height="14px" />
           </div>
-          <div class="kv">
-            <div class="skeleton esqueleto__rotulo"></div>
-            <div class="skeleton esqueleto__valor esqueleto__valor--largo"></div>
+          <div class="flex-1 min-w-0 flex flex-column gap-2">
+            <p-skeleton width="64px" height="12px" />
+            <p-skeleton width="260px" height="14px" />
           </div>
         </div>
       }
@@ -108,28 +108,29 @@
     <!-- A primeira busca falhou: só o toast de erro -->
   } @else if (gatilhos.length === 0) {
     <div class="req-empty">
-      <i class="pi pi-folder-open vazio__icone" aria-hidden="true"></i>
-      <p>{{ 'portal.generic.label.empty-trigger-list' | translate }}</p>
+      <i class="pi pi-folder-open" aria-hidden="true"></i>
+      <span>{{ 'portal.generic.label.empty-trigger-list' | translate }}</span>
     </div>
   } @else if (filtrados.length === 0) {
     <div class="req-empty">
-      <i class="pi pi-search vazio__icone" aria-hidden="true"></i>
-      <p>{{ 'portal.generic.results-not-found' | translate }}</p>
+      <i class="pi pi-search" aria-hidden="true"></i>
+      <span>{{ 'portal.generic.results-not-found' | translate }}</span>
     </div>
   } @else {
-    <div class="lista">
+    <div class="list-stack">
       @for (gatilho of pagina; track gatilho.id) {
         <app-object-trigger-card [gatilho]="gatilho" />
       }
     </div>
 
-    <p-paginator
-      [first]="primeiro"
-      [rows]="porPagina"
-      [totalRecords]="filtrados.length"
-      [pageLinkSize]="5"
-      styleClass="paginator--md"
-      (onPageChange)="aoMudarPagina($event)"
-    />
+    <div class="reduce-paginator-size">
+      <p-paginator
+        [first]="primeiro"
+        [rows]="porPagina"
+        [totalRecords]="filtrados.length"
+        [pageLinkSize]="5"
+        (onPageChange)="aoMudarPagina($event)"
+      />
+    </div>
   }
 </div>

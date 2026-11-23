@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
 import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -7,7 +8,15 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { CategoriaCondicao, GrupoCategoria, OPERADORES, Operador, TAG_OPERADOR, operadorExigeValor } from '../../object-trigger.model';
+import {
+  CategoriaCondicao,
+  GrupoCategoria,
+  OPERADORES,
+  Operador,
+  TAG_OPERADOR,
+  operadorExigeValor,
+  operadorUsaIntervalo
+} from '../../object-trigger.model';
 import {
   CondicaoForm,
   criarCondicaoForm,
@@ -23,6 +32,7 @@ let proximoId = 0;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.Default,
   imports: [
+    NgTemplateOutlet,
     ReactiveFormsModule,
     TranslateModule,
     ButtonModule,
@@ -74,21 +84,38 @@ export class ObjectTriggerConditionGroupComponent {
     return this.categorias.find(c => c.id === id);
   }
 
-  /** Com o operador escolhido, o campo Valor não se aplica (Alterado, Não alterado, Presente, Ausente). */
+  /** Com o operador escolhido, o campo Valor não se aplica (Presente, Ausente). */
   protected valorNaoSeAplica(condicao: CondicaoForm): boolean {
     return condicao.controls.categoriaId.value != null && !operadorExigeValor(condicao.controls.operador.value);
   }
 
+  /** "Entre" e "Entre ou igual": o Valor vira dois campos (de e até). */
+  protected usaIntervalo(condicao: CondicaoForm): boolean {
+    return condicao.controls.categoriaId.value != null && operadorUsaIntervalo(condicao.controls.operador.value);
+  }
+
   /**
-   * Ao trocar a categoria: o valor anterior perde o sentido e é limpo; o operador é mantido
+   * Placeholder do campo Valor: "Não se aplica" com operador sem valor; no intervalo, "De" ou "Até";
+   * nos demais casos, o do tipo da categoria.
+   */
+  protected placeholderValor(condicao: CondicaoForm, doTipo: string, doIntervalo: string | null): string {
+    if (this.valorNaoSeAplica(condicao)) {
+      return 'portal.generic.placeholder.value-not-applicable';
+    }
+    return doIntervalo ?? doTipo;
+  }
+
+  /**
+   * Ao trocar a categoria: os valores anteriores perdem o sentido e são limpos; o operador é mantido
    * (a lista é a mesma para todas as categorias) ou, se ainda não houver, começa em "Igual a".
    */
   protected aoMudarCategoria(condicao: CondicaoForm): void {
-    const { categoriaId, operador, valor } = condicao.controls;
+    const { categoriaId, operador, valor, valorFim } = condicao.controls;
     if (categoriaId.value != null && operador.value == null) {
       operador.setValue('IGUAL', { emitEvent: false });
     }
     valor.reset(null, { emitEvent: false });
+    valorFim.reset(null, { emitEvent: false });
     sincronizarCamposCondicao(condicao);
   }
 

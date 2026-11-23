@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { SkeletonModule } from 'primeng/skeleton';
 import { finalize } from 'rxjs';
 
 import { ObjectTrigger } from '../../object-trigger.model';
@@ -46,6 +47,7 @@ function normalizar(texto: string): string {
     ButtonModule,
     DropdownModule,
     PaginatorModule,
+    SkeletonModule,
     ObjectTriggerCardComponent,
     ObjectTriggerFilterComponent
   ],

@@ -21,77 +21,78 @@ componente.
 #### Título do bloco
 - **Tag:** recebido de `app-object-trigger-fields`: `portal.generic.label.all-conditions-satisfied`
   no bloco "Todas" e `portal.generic.label.any-condition-satisfied` no bloco "Qualquer"
-- **CSS:** `.grupo__titulo`; h3; nomeia o bloco para leitores de tela.
+- **CSS:** `medium`; `m-0` (PrimeFlex); h3;
 
 #### Lista de condições
-- **CSS:** `.grupo__lista`; 12px entre as linhas.
+- **CSS:** `flex flex-column gap-3` (PrimeFlex); 1rem entre as linhas.
 - **Regras:** uma linha por condição, na ordem em que foram adicionadas; sem limite de
   quantidade; sem nenhuma linha, a lista não aparece. Em somente leitura, Categoria, Operador
-  e Valor ficam desabilitados, mas com o valor legível (ver Estados).
+  e Valor ficam desabilitados (ver Estados).
 
 #### Rótulo "Categoria"
 - **Tag:** `portal.generic.label.category`
-- **CSS:** `form-overline` (globais); associado ao campo Categoria da linha.
+- **CSS:** `equipment-event-label`; associado ao campo Categoria da linha.
 
 #### Campo Categoria
 - **Tag:** `portal.createso.placeholder.find-category` (placeholder)
 - **Componente:** `p-dropdown`, com grupos
-- **CSS:** `campo` e `campo-painel` (globais)
+- **CSS:** — (visual padrão do PrimeNG); com erro, `field-invalid` no `p-dropdown`.
 - **Comportamento:** ao abrir, lista as categorias agrupadas: o nome do grupo aparece como
-  cabeçalho não selecionável, em maiúsculas, e as categorias do grupo logo abaixo. Ao
+  cabeçalho não selecionável (visual padrão do PrimeNG) e as categorias do grupo logo abaixo. Ao
   escolher uma categoria, o campo mostra "Grupo > Categoria" (ex.: "Ordem de serviço >
-  Status"); o Operador é habilitado e, se ainda estiver vazio, recebe "Igual a"; o Valor é
-  limpo e habilitado (ou desabilitado, se o operador não usar valor). Ao trocar de
-  categoria, o operador escolhido é mantido.
+  Status"); o Operador é habilitado.
 - **Regras:** hoje há um único grupo, "Ordem de serviço", com uma única categoria,
   "Status". Uma linha sem categoria é ignorada: não bloqueia o botão "Criar" e não é salva.
   Depois de escolhida, a categoria não pode voltar a ficar vazia.
-- **Origem do dado:** `--`
+- **Origem do dado:** opções em `ObjectTriggerFieldDTO.objectType` e
+  `ObjectTriggerFieldDTO.objectTranslationTag`; valor exibido em
+  `ObjectTriggerConditionDTO.field.objectType
 
 #### Rótulo "Operador"
 - **Tag:** `iclass.generic.label.select-operator`
-- **CSS:** `form-overline` (globais); associado ao campo Operador da linha.
+- **CSS:** `equipment-event-label`; associado ao campo Operador da linha.
 
 #### Campo Operador
 - **Tag:** `portal.generic.label.select` (placeholder)
 - **Componente:** `p-dropdown`
-- **CSS:** `campo` e `campo-painel` (globais); a lista mostra até 480px de altura, o
-  suficiente para as 12 opções sem rolagem.
+- **CSS:** — (visual padrão do PrimeNG); a lista mostra até 480px de altura, o suficiente
+  para as 12 opções sem rolagem.
 - **Comportamento:** ao escolher um operador que não usa valor, o Valor é limpo e
   desabilitado; ao escolher um operador que usa valor, o Valor é habilitado e mantém o
   valor que já estava escolhido.
+- **Origem do dado:** `ObjectTriggerConditionDTO.operator`
 - **Regras:** desabilitado enquanto a linha não tem categoria. Com categoria, é
-  obrigatório; sem operador, exibe `portal.generic.label.required-field` (`form-error`,
-  globais) e borda vermelha (`campo--invalido`, globais) depois que o usuário sai do campo.
-  As opções são as mesmas para qualquer categoria, nesta ordem:
+  obrigatório; sem operador, exibe `portal.generic.label.required-field` (`caption restrictions-header-error m-0`) e
+  borda e texto vermelhos (`field-invalid`, no `p-dropdown`) depois que
+  o usuário sai do campo. As opções são as mesmas para qualquer categoria, na ordem do enum:
 
-  | Opção             | Tag                                            | Usa valor |
-  | ----------------- | ---------------------------------------------- | --------- |
-  | Igual a           | `portal.generic.label.equal`                   | sim       |
-  | Diferente         | `portal.generic.label.operator-different`      | sim       |
-  | Maior que         | `portal.generic.label.greater-than`            | sim       |
-  | Menor que         | `portal.generic.label.less-than`               | sim       |
-  | Alterado          | `portal.generic.label.operator-changed`        | não       |
-  | Não alterado      | `portal.generic.label.operator-not-changed`    | não       |
-  | Alterado para     | `portal.generic.label.operator-changed-to`     | sim       |
-  | Não alterado para | `portal.generic.label.operator-not-changed-to` | sim       |
-  | Alterado de       | `portal.generic.label.operator-changed-from`   | sim       |
-  | Não alterado de   | `portal.generic.label.operator-not-changed-from` | sim     |
-  | Presente          | `portal.generic.label.operator-present`        | não       |
-  | Ausente           | `portal.generic.label.operator-absent`         | não       |
+  | Enum | Opção                                       | Tag                                                   | Usa valor          |
+  | ---- | ------------------------------------------- | ----------------------------------------------------- | ------------------ |
+  | 1    | Presente                                    | `portal.generic.label.operator-present`               | não                |
+  | 2    | Ausente                                     | `portal.generic.label.operator-absent`                | não                |
+  | 3    | Igual a                                     | `portal.generic.label.equal`                          | sim                |
+  | 4    | Diferente                                   | `portal.generic.label.operator-different`             | sim                |
+  | 5    | Maior que                                   | `portal.generic.label.greater-than`                   | sim                |
+  | 6    | Maior que ou igual a                        | `iclass.generic.label.greater-than-or-equal-to`       | sim                |
+  | 7    | Menor que                                   | `portal.generic.label.less-than`                      | sim                |
+  | 8    | Menor que ou igual a                        | `iclass.generic.label.less-than-or-equal-to`          | sim                |
+  | 9    | Entre                                       | `iclass.generic.label.between`                        | sim, dois (de e até) |
+  | 10   | Entre ou igual                              | `portal.generic.label.operator-between-or-equal`      | sim, dois (de e até) |
+  | 11   | É igual a (sem diferenciar maiúsculas)      | `portal.generic.label.operator-equal-ignore-case`     | sim                |
+  | 12   | É diferente de (sem diferenciar maiúsculas) | `portal.generic.label.operator-not-equal-ignore-case` | sim                |
 
 #### Rótulo "Valor"
 - **Tag:** `portal.generic.label.value`
-- **CSS:** `form-overline` (globais); associado ao campo Valor da linha.
+- **CSS:** `equipment-event-label`; associado ao campo Valor da linha.
 
 #### Campo Valor
 - **Tag:** placeholder conforme o caso (ver Regras)
 - **Componente:** depende do tipo da categoria: `p-dropdown` (Lista), `p-inputNumber`
   (Número), `p-calendar` (Data) ou `pInputText` (Texto); sem categoria, `p-dropdown`
   desabilitado.
-- **CSS:** `campo` e `campo-painel` (globais) no tipo Lista; `campo-host` no componente e
-  `campo` no campo de digitação (globais) nos tipos Número e Data; `campo` (globais) no
-  tipo Texto.
+- **CSS:** tipo Lista e sem categoria, visual padrão do PrimeNG; tipo Número, `w-full` no
+  componente e `ui-input w-full` no campo de digitação; tipo Data, `w-full` no
+  componente e `ui-input` no campo de digitação; tipo Texto, `ui-input w-full`.
 - **Comportamento:**
   - **Lista:** ao abrir, mostra os valores da categoria (até 480px de altura, com rolagem
     além disso); ao escolher, o campo mostra o valor.
@@ -106,26 +107,37 @@ componente.
 - **Regras:**
   - Sem categoria: desabilitado, com o placeholder
     `portal.generic.placeholder.select-category-first`.
-  - Com operador que não usa valor (Alterado, Não alterado, Presente, Ausente): vazio,
+  - Com operador que não usa valor (Presente, Ausente): vazio,
     desabilitado, com o placeholder `portal.generic.placeholder.value-not-applicable`; a
     condição é salva sem valor.
-  - Nos demais casos: habilitado e obrigatório (no tipo Texto, só espaços não vale), com o
-    placeholder do tipo: Lista `portal.generic.placeholder.select-value`, Número
+  - Com operador de intervalo (Entre, Entre ou igual): o Valor vira dois campos lado a lado,
+    do mesmo tipo (ver Layout), os dois habilitados e obrigatórios: o início, com o placeholder
+    `iclass.generic.label.from`, e o fim, com o placeholder `iclass.generic.label.to`, que
+    também é o nome do campo para leitores de tela (o início usa o rótulo "Valor"). Não há
+    validação de o início ser menor que o fim. Ao trocar para um operador que não é de
+    intervalo, o fim é limpo e some, e o início continua como Valor.
+  - Nos demais casos: um campo, habilitado e obrigatório (no tipo Texto, só espaços não
+    vale), com o placeholder do tipo: Lista `portal.generic.placeholder.select-value`, Número
     `portal.generic.placeholder.number-value` e Texto `portal.generic.placeholder.type-value`;
     o tipo Data fica sem placeholder.
-  - Sem valor, exibe `portal.generic.label.required-field` (`form-error`, globais) e borda
-    vermelha (`campo--invalido`, globais) depois que o usuário sai do campo.
-  - Desabilitado, tem fundo `#F3F4F6` e texto `#9CA3AF`.
+  - Sem valor, exibe `portal.generic.label.required-field` (`caption restrictions-header-error m-0`)
+    depois que o usuário sai do campo; no intervalo, uma única mensagem abaixo dos dois
+    campos, se qualquer um deles estiver vazio. No tipo Lista, o dropdown fica com borda e texto
+    vermelhos (`field-invalid`); nos tipos Número, Data e Texto, vale a borda
+    vermelha padrão do PrimeNG, que aparece quando o valor foi alterado e está inválido.
+  - Desabilitado, tem a aparência padrão do PrimeNG para campo desabilitado; o dropdown
+    desabilitado não mostra a seta (`.p-dropdown.p-disabled`).
   - Hoje só a categoria "Status" existe e é do tipo Lista, com os valores Aberta, Agendada,
     Atendimento, Aprovação, Fila técnico, Deslocamento, Despachada, Vinculada credenciada,
     Em análise, Concluída, Encerrada, Paralisada, Pré-aberta e Suporte, nessa ordem.
-- **Origem do dado:** `--`
+- **Origem do dado:** `ObjectTriggerConditionDTO.value1` caso necessário `ObjectTriggerConditionDTO.value2`;
 
 #### Botão "Remover condição"
 - **Tag:** — (só ícone, sem tooltip nem `aria-label`, por decisão do time)
 - **Componente:** `p-button`
 - **Ícone:** `pi pi-trash`
-- **CSS:** `btn--md btn--danger btn--text p-button-icon-only` (globais); `p-button-icon-only` é aplicada pelo PrimeNG em botão só com ícone.
+- **CSS:** `btn--md btn--neutral`; `flex-shrink-0` (PrimeFlex); ícone cinza, sem fundo; 48 × 32px, com a
+  largura padrão do PrimeNG para botão só com ícone.
 - **Comportamento:** ao clicar, remove a linha imediatamente, sem confirmação.
 - **Regras:** não aparece em somente leitura.
 
@@ -133,28 +145,31 @@ componente.
 - **Tag:** `portal.generic.label.add-condition`
 - **Componente:** `p-button`
 - **Ícone:** `pi pi-plus`
-- **CSS:** `btn--dashed` (globais)
+- **CSS:** `customer-portal-button-positive-color` no elemento que envolve o botão; fundo branco, texto azul.
 - **Comportamento:** ao clicar, adiciona uma linha vazia ao fim do bloco, com Operador e
   Valor desabilitados.
 - **Regras:** não aparece em somente leitura.
 
 #### Mensagem "Nenhuma condição"
 - **Tag:** `portal.generic.label.no-conditions`
-- **CSS:** `.grupo__vazio`
+- **CSS:** `description-medium`; `m-0` (PrimeFlex)
 - **Regras:** só aparece em somente leitura, quando o bloco não tem nenhuma linha; ocupa o
   lugar da lista.
 
 ### Layout
-O bloco é uma coluna, com 12px entre os itens:
+O bloco é uma coluna, com 1rem entre os itens (`flex flex-column gap-3`, PrimeFlex):
 
 1. **Título do bloco (topo).**
-2. **Lista de condições:** cada linha tem duas colunas (`item-linha`, globais):
-   1. **Esquerda (ocupa o espaço restante):** card (`item-card`, globais) com Categoria,
-      Operador e Valor lado a lado, em três colunas na proporção 1,2 : 1 : 1, com 14px
-      entre elas; cada coluna é um `form-field` (globais): rótulo em cima, campo e mensagem de erro embaixo.
-   2. **Direita (32px):** botão "Remover condição", centralizado na altura do card. Em
-      somente leitura, essa coluna não existe e o card ocupa a largura toda
-      (`.item-linha.item-linha--leitura`).
+2. **Lista de condições:** cada linha tem duas partes, alinhadas ao centro e com 16px entre elas (`flex align-items-center gap-3`, PrimeFlex):
+   1. **Esquerda (ocupa o espaço restante):** card (`div-filter`, com `flex-1 min-w-0
+      flex align-items-start gap-3`, PrimeFlex) com Categoria, Operador e Valor lado a lado,
+      com 1rem entre eles: Categoria com 5/12 da largura (`w-5 flex-shrink-0`), Operador e
+      Valor dividindo o restante em partes iguais (`flex-1`). Cada um é uma coluna `flex
+      flex-column gap-2 min-w-0` (PrimeFlex): rótulo em cima, campo e mensagem de erro embaixo.
+      Com operador de intervalo, o Valor tem os dois campos ("de" e "até") lado a lado, com a
+      mesma largura e 8px entre eles (`flex gap-2`, cada um `flex-1 min-w-0`, PrimeFlex).
+   2. **Direita (largura do botão, 48px):** botão "Remover condição", centralizado na altura do card. Em
+      somente leitura, essa coluna não existe e o card ocupa a largura toda.
 3. **Botão "Adicionar condição" (embaixo, alinhado à esquerda).** Em somente leitura, não
    aparece; sem linhas, a mensagem "Nenhuma condição" fica logo abaixo do título.
 
@@ -164,23 +179,18 @@ O bloco é uma coluna, com 12px entre os itens:
 | Sem condições            | O bloco não tem nenhuma linha                        | Só o título e o botão "Adicionar condição"                                                      |
 | Linha sem categoria      | Linha recém-adicionada                               | Categoria com placeholder; Operador e Valor desabilitados, com seus placeholders                 |
 | Linha com categoria      | Categoria escolhida e operador que usa valor         | Operador preenchido; Valor habilitado no controle do tipo da categoria                           |
-| Operador sem valor       | Operador Alterado, Não alterado, Presente ou Ausente | Valor vazio e desabilitado, com `portal.generic.placeholder.value-not-applicable`                |
-| Campo obrigatório vazio  | Operador ou Valor habilitado e vazio, depois que o usuário saiu do campo | Borda vermelha no campo e `portal.generic.label.required-field` abaixo dele |
-| Somente leitura          | Página do gatilho fora do modo de edição             | Campos desabilitados com fundo `#F3F4F6`; valores escolhidos em `#374151` (`modo-leitura`, globais); sem "Remover condição" nem "Adicionar condição" |
+| Operador sem valor       | Operador Presente ou Ausente                         | Valor vazio e desabilitado, com `portal.generic.placeholder.value-not-applicable`                |
+| Operador de intervalo    | Operador Entre ou Entre ou igual                     | Valor com dois campos lado a lado, do tipo da categoria, com os placeholders `iclass.generic.label.from` e `iclass.generic.label.to` |
+| Campo obrigatório vazio  | Operador ou Valor habilitado e vazio, depois que o usuário saiu do campo | `portal.generic.label.required-field` abaixo do campo; borda vermelha no dropdown (`field-invalid`) e, nos campos de digitação, a borda vermelha padrão do PrimeNG quando o valor foi alterado |
+| Somente leitura          | Página do gatilho fora do modo de edição             | Campos desabilitados com a aparência padrão do PrimeNG (opacidade de 60%); dropdowns sem a seta; sem "Remover condição" nem "Adicionar condição" |
 | Somente leitura sem condições | Somente leitura e o bloco sem nenhuma linha     | Título do bloco e `portal.generic.label.no-conditions` |
 
 ### Comportamentos
 - **Dado** uma linha com categoria, operador e valor escolhidos, **quando** o usuário troca
-  a categoria, **então** o operador é mantido e o valor é limpo, no controle do tipo da nova
-  categoria.
+  a categoria, **então** o operador é mantido e o valor é limpo (no intervalo, os dois), no
+  controle do tipo da nova categoria.
 
 ### CSS
 | Classe                          | Definição |
 | ------------------------------- | --------- |
-| @charset "UTF-8"; :host         | display: block; |
-| .grupo                          | display: flex;<br>flex-direction: column;<br>gap: 12px; |
-| .grupo__titulo                  | margin: 0;<br>font: 500 14px/21px var(--font-family-text);<br>color: #1F2937; |
-| .grupo__lista                   | display: flex;<br>flex-direction: column;<br>gap: 12px; |
-| .condicao                       | display: grid;<br>grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);<br>align-items: start;<br>gap: 14px; |
-| .item-linha.item-linha--leitura | grid-template-columns: minmax(0, 1fr); |
-| .grupo__vazio                   | margin: 0;<br>font: var(--secondary-md);<br>color: #6B7280; |
+| :host                           | display: block; |

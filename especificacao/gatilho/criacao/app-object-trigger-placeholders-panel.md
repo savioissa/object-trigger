@@ -18,30 +18,33 @@ corpo.
 
 #### Título do painel
 - **Tag:** `portal.generic.label.available-placeholders`
-- **CSS:** `.painel__titulo`; h3.
+- **CSS:** `medium`; `m-0` (PrimeFlex); h3.
 
 #### Botão "Fechar"
 - **Tag:** — (só ícone, sem tooltip nem `aria-label`, por decisão do time)
 - **Componente:** `p-button`
 - **Ícone:** `pi pi-times`
-- **CSS:** `btn--md btn--text icon-neutral p-button-icon-only` (globais) e `p-button-text` (PrimeNG); `p-button-icon-only` é aplicada pelo PrimeNG em botão só com ícone.
+- **CSS:** `btn--md btn--neutral`; `flex-shrink-0` (PrimeFlex); ícone cinza, sem fundo; 48 × 32px, com a
+  largura padrão do PrimeNG para botão só com ícone.
 - **Comportamento:** ao clicar, fecha o painel (ver Fluxo no `README.md` da página).
 
 #### Abas dos grupos
 - **Componente:** `p-tabView`, com um `p-tabPanel` por grupo
-- **CSS:** `placeholders-tabs` (globais)
+- **CSS:** `req-tabs`
 - **Comportamento:** ao clicar numa aba, exibe os placeholders daquele grupo.
 - **Regras:** os grupos aparecem na ordem em que chegam; a primeira aba fica selecionada
   sempre que o painel é aberto; o nome da aba é o nome do grupo.
 - **Origem do dado:** `--`
 
 #### Nome do placeholder
-- **CSS:** `.painel__label`
+- **CSS:** `card-input`; `overflow-hidden text-overflow-ellipsis white-space-nowrap`
+  (PrimeFlex); truncado com reticências em uma linha.
 - **Regras:** um por placeholder do grupo selecionado, na ordem em que chegam.
 - **Origem do dado:** `--`
 
 #### Código do placeholder
-- **CSS:** `.painel__token`; fonte monoespaçada; truncado com reticências em uma linha.
+- **CSS:** `overflow-hidden text-overflow-ellipsis white-space-nowrap select-all` (PrimeFlex) e
+  `.painel__token`; fonte monoespaçada; truncado com reticências em uma linha.
 - **Regras:** exibido no formato `{{caminho.do.dado}}` (ex.: `{{os.id}}`); um clique
   seleciona o código inteiro.
 - **Origem do dado:** `--`
@@ -50,7 +53,8 @@ corpo.
 - **Tag:** — (só ícone, sem tooltip nem `aria-label`, por decisão do time)
 - **Componente:** `p-button`
 - **Ícone:** `pi pi-copy`
-- **CSS:** `btn--md btn--text icon-neutral p-button-icon-only` (globais) e `p-button-text` (PrimeNG); `p-button-icon-only` é aplicada pelo PrimeNG em botão só com ícone.
+- **CSS:** `btn--md btn--neutral`; `flex-shrink-0` (PrimeFlex); ícone cinza, sem fundo; 48 × 32px, com a
+  largura padrão do PrimeNG para botão só com ícone.
 - **Comportamento:** ao clicar, copia o código do placeholder para a área de transferência
   e exibe um toast de sucesso por 2,5 segundos, com o título `portal.generic.label.copied`
   e o texto `iclass.generic.label.copied-to-clipboard`. Se a cópia falhar, exibe um toast de
@@ -59,20 +63,25 @@ corpo.
   código do placeholder.
 
 ### Layout
-Card com borda, cantos arredondados e sombra leve, organizado em uma coluna:
+Card branco com borda e cantos arredondados (`card-container-default-basic-layout`,
+com `overflow-hidden`, PrimeFlex), organizado em uma coluna. As classes abaixo são do
+PrimeFlex.
 
-1. **Cabeçalho (topo):** título à esquerda e botão "Fechar" à direita, alinhados ao centro.
+1. **Cabeçalho (topo, `flex align-items-center justify-content-between gap-3 px-3 pt-3
+   pb-1`):** título à esquerda e botão "Fechar" à direita, alinhados ao centro.
 2. **Abas (abaixo do cabeçalho, largura toda):** nomes dos grupos lado a lado, com uma linha
    inferior de largura total.
-3. **Lista (abaixo das abas):** um item por placeholder. Cada item é uma linha com o nome
-   em cima e o código embaixo, à esquerda, e o botão "Copiar" à direita, alinhado ao centro.
+3. **Lista (abaixo das abas, `list-none m-0 p-0 pb-2`):** um item por placeholder. Cada
+   item é uma linha (`flex align-items-center justify-content-between gap-3 px-3 py-2`) com
+   o nome em cima e o código embaixo, à esquerda (`flex flex-column gap-1 min-w-0`), e o
+   botão "Copiar" à direita, alinhado ao centro.
 
 ### Estados
 | Estado          | Quando                                  | O que deve ser exibido                                          |
 | --------------- | --------------------------------------- | --------------------------------------------------------------- |
 | Padrão          | Painel aberto                           | Primeira aba selecionada e seus placeholders                    |
-| Aba selecionada | O usuário clicou em uma aba             | Aba com texto `#2563EB` e linha inferior `#3B82F6`; itens dela  |
-| Hover no item   | Cursor sobre um item da lista           | Fundo do item `#F8FAFC`                                         |
+| Aba selecionada | O usuário clicou em uma aba             | Aba com o destaque padrão do PrimeNG (texto e linha inferior azuis); itens dela |
+| Hover no item   | Cursor sobre um item da lista           | Fundo do item na cor `surface-50` do tema (`hover:surface-50`, PrimeFlex) |
 
 ### Comportamentos
 - **Dado** o painel aberto em uma aba que não é a primeira, **quando** o usuário fecha e
@@ -82,12 +91,4 @@ Card com borda, cantos arredondados e sombra leve, organizado em uma coluna:
 | Classe              | Definição |
 | ------------------- | --------- |
 | :host               | display: block; |
-| .painel             | overflow: hidden;<br>background: #fff;<br>border: 1px solid #E5E7EB;<br>border-radius: 10px;<br>box-shadow: 0 2px 6px rgba(16, 24, 40, 0.08); |
-| .painel__cabecalho  | display: flex;<br>align-items: center;<br>justify-content: space-between;<br>gap: 12px;<br>padding: 12px 12px 12px 16px; |
-| .painel__titulo     | margin: 0;<br>font: 500 14px/21px var(--font-family-text);<br>color: #1F2937; |
-| .painel__lista      | margin: 0;<br>padding: 0;<br>list-style: none; |
-| .painel__item       | display: flex;<br>align-items: center;<br>justify-content: space-between;<br>gap: 12px;<br>padding: 8px 12px 8px 20px; |
-| .painel__item:hover | background: #F8FAFC; |
-| .painel__texto      | display: flex;<br>flex-direction: column;<br>gap: 2px;<br>min-width: 0; |
-| .painel__label      | font: var(--secondary-md);<br>color: #1F2937; |
-| .painel__token      | overflow: hidden;<br>font: 400 12px/16px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;<br>color: #6B7280;<br>text-overflow: ellipsis;<br>white-space: nowrap;<br>user-select: all; |
+| .painel__token      | font: 400 12px/16px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;<br>color: #6B7280; |

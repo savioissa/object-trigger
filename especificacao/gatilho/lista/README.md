@@ -17,7 +17,7 @@ ordenação, abrir a página de um gatilho e iniciar a criação de um novo.
 ### Layout
 A página é dividida em duas seções:
 
-1. **Cabeçalho (topo):** título da página e botões "Novo", "Filtros", "Ordenação" e
+1. **Cabeçalho (topo, fixo ao rolar):** título da página e botões "Novo", "Filtros", "Ordenação" e
    "Atualizar".
 2. **Conteúdo (abaixo):** painéis abertos, um `app-object-trigger-card` por gatilho,
    empilhados em uma coluna, e o `p-paginator` embaixo, à direita.

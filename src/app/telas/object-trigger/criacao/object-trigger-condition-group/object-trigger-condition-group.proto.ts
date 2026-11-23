@@ -34,14 +34,18 @@ export default ajustar(ObjectTriggerConditionGroupComponent, {
       descricao: 'Operador Presente: Valor vazio, desabilitado e "Não se aplica a este operador".',
       inputs: () => bloco(criarCondicaoForm({ categoriaId: 'os.status', operador: 'PRESENTE' }))()
     },
+    'Operador de intervalo': {
+      descricao: 'Operador Entre: o Valor vira dois campos, "De" e "Até".',
+      inputs: () => bloco(criarCondicaoForm({ categoriaId: 'os.status', operador: 'ENTRE', valor: 'AGENDADA' }))()
+    },
     'Campo obrigatório vazio': {
       descricao: 'Valor habilitado e vazio depois que o usuário saiu do campo.',
-      inputs: () => bloco(tocada(criarCondicaoForm({ categoriaId: 'os.status', operador: 'ALTERADO_PARA' })))()
+      inputs: () => bloco(tocada(criarCondicaoForm({ categoriaId: 'os.status', operador: 'IGUAL' })))()
     },
     'Várias linhas': {
       inputs: () =>
         bloco(
-          criarCondicaoForm({ categoriaId: 'os.status', operador: 'ALTERADO_PARA', valor: 'CONCLUIDA' }),
+          criarCondicaoForm({ categoriaId: 'os.status', operador: 'IGUAL', valor: 'CONCLUIDA' }),
           criarCondicaoForm({ categoriaId: 'os.status', operador: 'AUSENTE' }),
           criarCondicaoForm()
         )()

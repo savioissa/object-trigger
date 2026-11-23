@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { SkeletonModule } from 'primeng/skeleton';
 import { Observable, catchError, finalize, forkJoin, of, switchMap, tap } from 'rxjs';
 
 import { GrupoCategoria, GrupoPlaceholder, ObjectTrigger, Webhook } from '../../object-trigger.model';
@@ -27,10 +28,9 @@ import { ComAlteracoesNaoSalvas } from '../../../compartilhado/alteracoes-nao-sa
   selector: 'app-object-trigger-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.Default,
-  imports: [RouterLink, TranslateModule, ButtonModule, ObjectTriggerFieldsComponent],
+  imports: [RouterLink, TranslateModule, ButtonModule, SkeletonModule, ObjectTriggerFieldsComponent],
   templateUrl: './object-trigger-home.component.html',
-  styleUrl: './object-trigger-home.component.css',
-  host: { '[class.modo-leitura]': '!editando' }
+  styleUrl: './object-trigger-home.component.css'
 })
 export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalvas {
   private readonly route = inject(ActivatedRoute);

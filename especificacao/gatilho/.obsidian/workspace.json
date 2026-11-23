@@ -11,10 +11,14 @@
             "id": "b84e6a2db985dc4a",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "home/app-object-trigger-home.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "Nova aba"
+              "title": "app-object-trigger-home"
             }
           }
         ]
@@ -184,16 +188,32 @@
       "bases:Criar nova base": false
     }
   },
-  "active": "b57b10ddc3bb31f5",
+  "active": "b84e6a2db985dc4a",
   "lastOpenFiles": [
-    "README.md",
-    "traducoes.md",
+    "criacao/app-object-trigger-placeholders-panel.md",
+    "lista/VgH6gu3P",
+    "criacao/hI5fHFR2",
+    "criacao/app-object-trigger-json-editor.md",
     "criacao/app-object-trigger-form.md",
     "criacao/app-object-trigger-fields.md",
+    "README.md.tmp.27656.991799419ca7",
+    "traducoes.md.tmp.27656.64c1d256b8cc",
+    "tRQNufA2",
+    "gj0SNGoy",
+    "criacao/app-object-trigger-condition-group.md.tmp.27656.c4d2c3077ff3",
+    "criacao/app-object-trigger-condition-group.md.tmp.27656.fe1e17e0b46f",
     "criacao/app-object-trigger-condition-group.md",
     "criacao/app-object-trigger-action.md",
-    "home/README.md",
     "home/app-object-trigger-home.md",
-    "lista/app-object-trigger-card.md"
+    "lista/app-object-trigger-card.md",
+    "traducoes.md",
+    "lista/app-object-trigger-list.md",
+    "lista/app-object-trigger-filter.md",
+    "lista/app-object-trigger-filter.md.tmp.27656.03fcddf27a39",
+    "lista/app-object-trigger-card.md.tmp.27656.aa3c58fa48bf",
+    "lista/README.md",
+    "css-global.md",
+    "README.md",
+    "home/README.md"
   ]
 }

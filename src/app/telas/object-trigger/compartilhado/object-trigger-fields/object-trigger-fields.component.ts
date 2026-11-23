@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { SkeletonModule } from 'primeng/skeleton';
 
 import { GrupoCategoria, GrupoPlaceholder, STATUS_OBJECT_TRIGGER, TAG_STATUS, Webhook } from '../../object-trigger.model';
 import { ObjectTriggerForm, criarAcaoForm, exibirErro } from '../../object-trigger-form.factory';
@@ -31,6 +32,7 @@ let proximoId = 0;
     DropdownModule,
     InputTextModule,
     InputTextareaModule,
+    SkeletonModule,
     ObjectTriggerActionComponent,
     ObjectTriggerConditionGroupComponent,
     ObjectTriggerPlaceholdersPanelComponent

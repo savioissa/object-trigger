@@ -16,60 +16,60 @@ dados gerais e da lista de ações.
 | `p-dropdown`                            | Externo | Campo Status |
 | `pInputText`                            | Externo | Campo Descrição |
 | `pInputTextarea`                        | Externo | Campo Observações |
+| `p-skeleton`                            | Externo | Estado Carregando |
 
 ### Elementos
 
 #### Rótulo "Descrição"
 - **Tag:** `iclass.generic.label.description`
-- **CSS:** `form-label` (globais); seguido de um asterisco vermelho (`form-label__required`,
-  globais), oculto para leitores de tela.
+- **CSS:** `t-label-field required`; o `required` acrescenta o asterisco vermelho
+  depois do texto.
 
 #### Campo Descrição
 - **Tag:** `portal.generic.placeholder.trigger-description` (placeholder)
 - **Componente:** `pInputText`
-- **CSS:** `campo` (globais); com erro, `campo--invalido` (globais).
+- **CSS:** `ui-input w-full`; com erro, a borda vermelha padrão do PrimeNG, que aparece quando o valor foi alterado e está inválido.
 - **Regras:** obrigatório; só espaços não vale; sem limite de caracteres. Vazio, exibe
-  abaixo `portal.generic.label.required-field` (`form-error`, globais), que descreve o
+  abaixo `portal.generic.label.required-field` (`caption restrictions-header-error m-0`), que descreve o
   campo para leitores de tela, depois que o usuário sai do campo. Em somente leitura,
   desabilitado.
-- **Origem do dado:** `--`
+- **Origem do dado:** `ObjectTriggerDTO.description`
 
 #### Rótulo "Status"
 - **Tag:** `portal.generic.label.status`
-- **CSS:** `form-label` (globais)
+- **CSS:** `t-label-field`
 
 #### Campo Status
 - **Componente:** `p-dropdown`
-- **CSS:** `campo` e `campo-painel` (globais)
+- **CSS:** — (visual padrão do PrimeNG; largura toda pelo `.p-dropdown`)
 - **Regras:** opções "Ativo" (`portal.generic.label.active`) e "Inativo"
   (`portal.generic.label.inactive`), nessa ordem; no cadastro, começa em "Ativo"; o texto
   selecionado e o da lista usam a mesma tag. Em somente leitura, desabilitado.
-- **Origem do dado:** `--`
+- **Origem do dado:** `ObjectTriggerDTO.status`
 
 #### Rótulo "Observações"
 - **Tag:** `portal.generic.label.notes`
-- **CSS:** `form-label` (globais)
+- **CSS:** `t-label-field`
 
 #### Campo Observações
 - **Tag:** `portal.generic.placeholder.trigger-notes` (placeholder)
 - **Componente:** `pInputTextarea`
-- **CSS:** `campo-textarea` (globais); altura inicial de 3 linhas, redimensionável na
-  vertical.
+- **CSS:** `ui-input w-full`; altura inicial de 3 linhas, redimensionável.
 - **Regras:** opcional; sem limite de caracteres. Em somente leitura, desabilitado.
-- **Origem do dado:** `--`
+- **Origem do dado:** `ObjectTriggerDTO.notes`
 
 #### Divisor
-- **CSS:** `.divisor`; separa os dados gerais da seção Condições e a seção Condições da
-  seção Ações.
+- **CSS:** `summary-divider`; separa os dados gerais da seção Condições e a seção
+  Condições da seção Ações.
 
 #### Título "Condições"
 - **Tag:** `portal.generic.label.conditions`
-- **CSS:** `t-title-sm` (globais) e `.secao__titulo`; h2; nomeia a seção para leitores de
+- **CSS:** `t-title-sm`; `m-0` (PrimeFlex); h2; nomeia a seção para leitores de
   tela.
 
 #### Subtítulo "Condições"
 - **Tag:** `portal.generic.label.conditions-set-trigger-execution`
-- **CSS:** `.secao__subtitulo`
+- **CSS:** `description-medium`; `m-0` (PrimeFlex)
 
 #### Bloco "Todas"
 - **Componente:** `app-object-trigger-condition-group`, com o título
@@ -81,16 +81,16 @@ dados gerais e da lista de ações.
 
 #### Título "Ações"
 - **Tag:** `portal.generic.label.actions`
-- **CSS:** `t-title-sm` (globais) e `.secao__titulo`; h2; nomeia a seção para leitores de
+- **CSS:** `t-title-sm`; `m-0` (PrimeFlex); h2; nomeia a seção para leitores de
   tela.
 
 #### Subtítulo "Ações"
 - **Tag:** `portal.generic.label.define-trigger-actions`
-- **CSS:** `.secao__subtitulo`
+- **CSS:** `description-medium`; `m-0` (PrimeFlex)
 
 #### Lista de ações
 - **Componente:** `app-object-trigger-action`, um por ação
-- **CSS:** `.acoes__lista`; 12px entre os itens.
+- **CSS:** `flex-1 min-w-0 flex flex-column gap-3` (PrimeFlex); 1rem entre os itens.
 - **Regras:** as ações aparecem na ordem em que foram adicionadas; sem limite de
   quantidade.
 
@@ -98,48 +98,49 @@ dados gerais e da lista de ações.
 - **Tag:** `portal.generic.label.add-action`
 - **Componente:** `p-button`
 - **Ícone:** `pi pi-plus`
-- **CSS:** `btn--dashed` (globais)
+- **CSS:** `customer-portal-button-positive-color` no elemento que envolve o botão; fundo branco, texto azul.
 - **Comportamento:** ao clicar, adiciona uma ação vazia (sem webhook) ao fim da lista.
 - **Regras:** não aparece em somente leitura.
 
 #### Mensagem "Nenhuma ação"
 - **Tag:** `portal.generic.label.no-actions`
-- **CSS:** `.acoes__vazio`
+- **CSS:** `description-medium`; `m-0` (PrimeFlex)
 - **Regras:** só aparece em somente leitura, quando não há nenhuma ação; ocupa o lugar da
   lista.
 
 #### Painel de placeholders
 - **Componente:** `app-object-trigger-placeholders-panel`
-- **CSS:** `.acoes__painel`
+- **CSS:** `sticky w-30rem flex-shrink-0` (PrimeFlex) e `.acoes__painel`
 - **Regras:** só aparece quando está aberto (ver Fluxo no `README.md` da página) e nunca em
-  somente leitura; tem 450px de largura; ao rolar a página, fica fixo 16px abaixo do
-  cabeçalho da página (a altura do cabeçalho é a de cada página: 68px na criação, 72px na
+  somente leitura; tem 30rem de largura; ao rolar a página, fica fixo 16px abaixo do
+  cabeçalho da página (a altura do cabeçalho é a de cada página: 65px na criação, 86px na
   página do gatilho).
 
 ### Layout
-O componente ocupa a largura toda, com margem interna de 28px nas laterais e no topo e
-64px embaixo, e é uma coluna:
+O componente ocupa a largura toda (`page-content`, com `pb-7`, PrimeFlex): margem
+interna de 32px nas laterais, 16px no topo e 4rem embaixo, e é uma coluna com 16px entre os
+blocos. As classes abaixo são do PrimeFlex, exceto `summary-divider`.
 
-1. **Dados gerais:** grade de duas colunas de mesma largura, com 20px entre colunas e
-   18px entre linhas: Descrição à esquerda e Status à direita; Observações embaixo,
-   ocupando as duas colunas. Cada campo é um `form-field` (globais): rótulo em cima, campo
-   e mensagem de erro embaixo.
-2. **Divisor.**
-3. **Seção Condições:** título e subtítulo; bloco "Todas"; bloco "Qualquer". 28px entre
-   esses itens.
+1. **Dados gerais (`grid`):** duas colunas de mesma largura (`col-6`): Descrição à esquerda
+   e Status à direita; Observações embaixo, ocupando as duas (`col-12`). Cada campo é uma
+   coluna `flex flex-column gap-2 min-w-0`: rótulo em cima, campo e mensagem de erro embaixo.
+2. **Divisor** (`summary-divider`: 18px acima e abaixo, além dos 16px da coluna).
+3. **Seção Condições (`flex flex-column gap-4`):** cabeçalho com título e subtítulo (`flex
+   flex-column gap-2 mb-1`); bloco "Todas"; bloco "Qualquer".
 4. **Divisor.**
-5. **Seção Ações:** título e subtítulo; abaixo, a lista de ações seguida do botão
+5. **Seção Ações (`flex flex-column gap-4`):** cabeçalho igual ao da seção Condições;
+   abaixo, uma linha `flex align-items-start gap-3` com a lista de ações seguida do botão
    "Adicionar ação" (ou da mensagem "Nenhuma ação", em somente leitura). Com o painel de
-   placeholders aberto, essa área vira duas colunas: a lista à esquerda (ocupa o espaço
-   restante) e o painel à direita (450px), com 20px entre elas, alinhados pelo topo.
+   placeholders aberto, ele aparece à direita da lista (30rem), alinhado pelo topo; a lista
+   ocupa o espaço restante.
 
 ### Estados
 | Estado          | Quando                                                                       | O que deve ser exibido |
 | --------------- | ---------------------------------------------------------------------------- | ---------------------- |
-| Carregando      | Enquanto as opções (e, na página do gatilho, o próprio gatilho) são buscadas | Com `aria-busy="true"`, todos os blocos viram skeleton (`skeleton`, globais), ocultos para leitores de tela: dados gerais com dois rótulos e campos lado a lado e um rótulo com campo de 80px na largura toda; seção Condições com título, subtítulo e dois blocos de 88px; seção Ações com título, subtítulo e um bloco de 88px; os divisores continuam entre as seções |
+| Carregando      | Enquanto as opções (e, na página do gatilho, o próprio gatilho) são buscadas | Com `aria-busy="true"`, todos os blocos viram `p-skeleton`, ocultos para leitores de tela: dados gerais com dois rótulos (96 × 14px) e campos (42px de altura, cantos de 6px) lado a lado e um rótulo com campo de 80px na largura toda; seção Condições com título (140 × 20px), subtítulo (320 × 14px) e dois blocos de 88px (cantos de 10px); seção Ações com título, subtítulo e um bloco de 88px; cada rótulo fica 8px acima do seu campo; os divisores continuam entre as seções |
 | Edição          | Página de criação, ou página do gatilho depois de "Editar"                   | Campos habilitados conforme as regras de cada um; botões de adicionar e remover visíveis |
-| Somente leitura | Página do gatilho fora do modo de edição                                     | Todos os campos desabilitados, com fundo `#F3F4F6` e o valor em `#374151` (`modo-leitura`, globais); sem "Adicionar ação", sem painel de placeholders; seções sem itens com as mensagens "Nenhuma condição" e "Nenhuma ação" |
-| Campo com erro  | Em edição, um campo obrigatório ficou vazio ou inválido e o usuário saiu dele | Borda vermelha e mensagem de erro abaixo do campo |
+| Somente leitura | Página do gatilho fora do modo de edição                                     | Todos os campos desabilitados, com a aparência padrão do PrimeNG (opacidade de 60%); dropdowns sem a seta; sem "Adicionar ação", sem painel de placeholders; seções sem itens com as mensagens "Nenhuma condição" e "Nenhuma ação" |
+| Campo com erro  | Em edição, um campo obrigatório ficou vazio ou inválido e o usuário saiu dele | Mensagem de erro abaixo do campo; dropdown com borda e texto vermelhos (`field-invalid`); input, número e data com a borda vermelha padrão do PrimeNG quando o valor foi alterado |
 
 ### Comportamentos
 - **Dado** qualquer campo obrigatório, **quando** o usuário ainda não interagiu com ele,
@@ -160,23 +161,4 @@ O componente ocupa a largura toda, com margem interna de 28px nas laterais e no 
 | Classe                | Definição |
 | --------------------- | --------- |
 | :host                 | display: block; |
-| .pagina__conteudo     | padding: 28px 28px 64px; |
-| .dados                | display: grid;<br>grid-template-columns: repeat(2, minmax(0, 1fr));<br>gap: 18px 20px; |
-| .dados__largo         | grid-column: 1 / -1; |
-| .divisor              | margin: 40px 0 32px;<br>border: 0;<br>border-top: 1px solid #EEF0F3; |
-| .secao                | display: flex;<br>flex-direction: column;<br>gap: 28px; |
-| .secao__cabecalho     | display: flex;<br>flex-direction: column;<br>gap: 6px;<br>margin-bottom: 4px; |
-| .secao__titulo        | margin: 0;<br>color: #1E293B; |
-| .secao__subtitulo     | margin: 0;<br>font: var(--secondary-md);<br>color: #4B5563; |
-| .acoes                | display: grid;<br>grid-template-columns: minmax(0, 1fr);<br>align-items: start;<br>gap: 20px; |
-| .acoes--com-painel    | grid-template-columns: minmax(0, 1fr) 450px; |
-| .acoes__lista         | display: flex;<br>flex-direction: column;<br>gap: 12px; |
-| .acoes__vazio         | margin: 0;<br>font: var(--secondary-md);<br>color: #6B7280; |
-| .acoes__painel        | position: sticky;<br>top: calc(var(--cabecalho-altura, 68px) + 16px); |
-| .esqueleto__campo     | display: flex;<br>flex-direction: column;<br>gap: 6px; |
-| .esqueleto__rotulo    | width: 96px;<br>height: 14px; |
-| .esqueleto__input     | height: 40px;<br>border-radius: 6px; |
-| .esqueleto__textarea  | height: 80px;<br>border-radius: 6px; |
-| .esqueleto__titulo    | width: 140px;<br>height: 20px; |
-| .esqueleto__subtitulo | width: 320px;<br>height: 14px; |
-| .esqueleto__bloco     | height: 88px;<br>border-radius: 8px; |
+| .acoes__painel        | top: calc(var(--cabecalho-altura, 65px) + 16px); |

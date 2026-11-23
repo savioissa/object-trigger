@@ -10,45 +10,52 @@ export const TAG_STATUS: Record<StatusObjectTrigger, string> = {
 /** Tipo do dado da categoria: define o controle do campo "Valor". */
 export type TipoCampo = 'LISTA' | 'TEXTO' | 'NUMERO' | 'DATA';
 
-/** Operadores disponíveis para qualquer categoria, na ordem exibida no dropdown. */
+/** Operadores disponíveis para qualquer categoria, na ordem do enum (1 a 12), que é a do dropdown. */
 export const OPERADORES = [
+  'PRESENTE',
+  'AUSENTE',
   'IGUAL',
   'DIFERENTE',
   'MAIOR_QUE',
+  'MAIOR_OU_IGUAL',
   'MENOR_QUE',
-  'ALTERADO',
-  'NAO_ALTERADO',
-  'ALTERADO_PARA',
-  'NAO_ALTERADO_PARA',
-  'ALTERADO_DE',
-  'NAO_ALTERADO_DE',
-  'PRESENTE',
-  'AUSENTE'
+  'MENOR_OU_IGUAL',
+  'ENTRE',
+  'ENTRE_OU_IGUAL',
+  'IGUAL_SEM_MAIUSCULAS',
+  'DIFERENTE_SEM_MAIUSCULAS'
 ] as const;
 
 export type Operador = (typeof OPERADORES)[number];
 
 /** Tag de tradução de cada operador. */
 export const TAG_OPERADOR: Record<Operador, string> = {
+  PRESENTE: 'portal.generic.label.operator-present',
+  AUSENTE: 'portal.generic.label.operator-absent',
   IGUAL: 'portal.generic.label.equal',
   DIFERENTE: 'portal.generic.label.operator-different',
   MAIOR_QUE: 'portal.generic.label.greater-than',
+  MAIOR_OU_IGUAL: 'iclass.generic.label.greater-than-or-equal-to',
   MENOR_QUE: 'portal.generic.label.less-than',
-  ALTERADO: 'portal.generic.label.operator-changed',
-  NAO_ALTERADO: 'portal.generic.label.operator-not-changed',
-  ALTERADO_PARA: 'portal.generic.label.operator-changed-to',
-  NAO_ALTERADO_PARA: 'portal.generic.label.operator-not-changed-to',
-  ALTERADO_DE: 'portal.generic.label.operator-changed-from',
-  NAO_ALTERADO_DE: 'portal.generic.label.operator-not-changed-from',
-  PRESENTE: 'portal.generic.label.operator-present',
-  AUSENTE: 'portal.generic.label.operator-absent'
+  MENOR_OU_IGUAL: 'iclass.generic.label.less-than-or-equal-to',
+  ENTRE: 'iclass.generic.label.between',
+  ENTRE_OU_IGUAL: 'portal.generic.label.operator-between-or-equal',
+  IGUAL_SEM_MAIUSCULAS: 'portal.generic.label.operator-equal-ignore-case',
+  DIFERENTE_SEM_MAIUSCULAS: 'portal.generic.label.operator-not-equal-ignore-case'
 };
 
 /** Operadores que não comparam com um valor: com eles o campo "Valor" fica desabilitado. */
-export const OPERADORES_SEM_VALOR: readonly Operador[] = ['ALTERADO', 'NAO_ALTERADO', 'PRESENTE', 'AUSENTE'];
+export const OPERADORES_SEM_VALOR: readonly Operador[] = ['PRESENTE', 'AUSENTE'];
+
+/** Operadores que comparam com um intervalo: com eles o "Valor" vira dois campos (de e até). */
+export const OPERADORES_INTERVALO: readonly Operador[] = ['ENTRE', 'ENTRE_OU_IGUAL'];
 
 export function operadorExigeValor(operador: Operador | null): boolean {
   return operador != null && !OPERADORES_SEM_VALOR.includes(operador);
+}
+
+export function operadorUsaIntervalo(operador: Operador | null): boolean {
+  return operador != null && OPERADORES_INTERVALO.includes(operador);
 }
 
 export interface OpcaoValor {
@@ -113,8 +120,10 @@ export type ValorCondicao = string | number;
 export interface Condicao {
   categoriaId: string;
   operador: Operador;
-  /** `null` quando o operador não usa valor (Alterado, Não alterado, Presente, Ausente). */
+  /** `null` quando o operador não usa valor (Presente, Ausente). Em "Entre" e "Entre ou igual", é o início. */
   valor: ValorCondicao | null;
+  /** Fim do intervalo, só em "Entre" e "Entre ou igual"; `null` nos demais operadores. */
+  valorFim: ValorCondicao | null;
 }
 
 export interface Acao {

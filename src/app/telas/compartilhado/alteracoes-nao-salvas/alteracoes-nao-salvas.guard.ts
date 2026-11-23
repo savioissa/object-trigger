@@ -32,7 +32,7 @@ export const alteracoesNaoSalvasGuard: CanDeactivateFn<ComAlteracoesNaoSalvas> =
       acceptIcon: 'none',
       rejectIcon: 'none',
       acceptButtonStyleClass: 'btn--md btn--danger',
-      rejectButtonStyleClass: 'btn--md btn--neutral',
+      rejectButtonStyleClass: 'btn--md btn--secondary',
       defaultFocus: 'reject',
       closeOnEscape: true,
       accept: () => resolver(true),

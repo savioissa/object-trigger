@@ -1,31 +1,7 @@
 :host {
-  --cabecalho-altura: 68px;
+  /* Altura do page-header (16 + 32 + 16 + 1 de borda); o painel de placeholders fica logo abaixo */
+  --cabecalho-altura: 65px;
   display: block;
   min-height: 100vh;
   background: #fff;
-}
-
-.pagina__cabecalho {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  height: var(--cabecalho-altura);
-  padding: 0 28px;
-  background: #fff;
-  border-bottom: 1px solid #E5E7EB;
-  box-sizing: border-box;
-}
-
-.pagina__titulo {
-  margin: 0;
-  color: #1E293B;
-}
-
-.pagina__botoes {
-  display: flex;
-  gap: 10px;
 }

@@ -19,7 +19,7 @@
 | Bloco "Todas"       | Bloco de condições em que todas precisam ser atendidas ("Todas as condições devem ser atendidas"). |
 | Bloco "Qualquer"    | Bloco de condições em que basta uma ser atendida ("Qualquer condição deve ser atendida"). |
 | Categoria           | Dado avaliado na condição, organizado em grupos (ex.: grupo "Ordem de serviço", categoria "Status"). O tipo da categoria (Lista, Número, Data ou Texto) define como o Valor é informado. |
-| Operador            | Comparação feita na condição (ex.: Igual a, Alterado para, Presente). Alguns operadores não usam Valor. |
+| Operador            | Comparação feita na condição (ex.: Igual a, Entre, Presente). Alguns operadores não usam Valor; "Entre" e "Entre ou igual" usam dois (de e até). |
 | Valor               | Valor com que a categoria é comparada. |
 | Ação                | O que o gatilho faz quando as condições são atendidas. Hoje, só "Chamar webhook". |
 | Webhook             | Chamada HTTP cadastrada, com nome, URL, descrição, método e corpo modelo. |

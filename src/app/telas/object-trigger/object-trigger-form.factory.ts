@@ -8,7 +8,8 @@ import {
   StatusObjectTrigger,
   TipoAcao,
   ValorCondicao,
-  operadorExigeValor
+  operadorExigeValor,
+  operadorUsaIntervalo
 } from './object-trigger.model';
 
 /* Formulário reativo do gatilho: criação dos grupos, validações e conversão para o payload.
@@ -21,6 +22,8 @@ export type CondicaoForm = FormGroup<{
   categoriaId: FormControl<string | null>;
   operador: FormControl<Operador | null>;
   valor: FormControl<ValorCondicaoForm | null>;
+  /** Fim do intervalo, só em "Entre" e "Entre ou igual". */
+  valorFim: FormControl<ValorCondicaoForm | null>;
 }>;
 
 export type AcaoForm = FormGroup<{
@@ -69,7 +72,8 @@ export function criarCondicaoForm(condicao?: Partial<Condicao>): CondicaoForm {
   const form: CondicaoForm = new FormGroup({
     categoriaId: new FormControl<string | null>(condicao?.categoriaId ?? null),
     operador: new FormControl<Operador | null>(condicao?.operador ?? null, obrigatorio),
-    valor: new FormControl<ValorCondicaoForm | null>(condicao?.valor ?? null, obrigatorio)
+    valor: new FormControl<ValorCondicaoForm | null>(condicao?.valor ?? null, obrigatorio),
+    valorFim: new FormControl<ValorCondicaoForm | null>(condicao?.valorFim ?? null, obrigatorio)
   });
   sincronizarCamposCondicao(form);
   return form;
@@ -78,12 +82,14 @@ export function criarCondicaoForm(condicao?: Partial<Condicao>): CondicaoForm {
 /**
  * Habilita ou desabilita Operador e Valor conforme a linha:
  * sem categoria, os dois ficam desabilitados; com operador que não usa valor, o Valor é limpo e desabilitado.
+ * O fim do intervalo só fica habilitado com "Entre" ou "Entre ou igual"; nos demais, é limpo.
  */
 export function sincronizarCamposCondicao(condicao: CondicaoForm): void {
-  const { categoriaId, operador, valor } = condicao.controls;
+  const { categoriaId, operador, valor, valorFim } = condicao.controls;
   if (categoriaId.value == null) {
     operador.disable({ emitEvent: false });
     valor.disable({ emitEvent: false });
+    valorFim.disable({ emitEvent: false });
   } else {
     operador.enable({ emitEvent: false });
     if (operadorExigeValor(operador.value)) {
@@ -91,6 +97,12 @@ export function sincronizarCamposCondicao(condicao: CondicaoForm): void {
     } else {
       valor.reset(null, { emitEvent: false });
       valor.disable({ emitEvent: false });
+    }
+    if (operadorUsaIntervalo(operador.value)) {
+      valorFim.enable({ emitEvent: false });
+    } else {
+      valorFim.reset(null, { emitEvent: false });
+      valorFim.disable({ emitEvent: false });
     }
   }
   condicao.updateValueAndValidity();
@@ -152,17 +164,22 @@ function formatarData(data: Date): string {
   return `${data.getFullYear()}-${mes}-${dia}`;
 }
 
+/** Valor do formulário no formato do payload: data como "AAAA-MM-DD" e texto sem espaços nas pontas. */
+function paraValor(bruto: ValorCondicaoForm | null): ValorCondicao | null {
+  if (bruto == null) {
+    return null;
+  }
+  return bruto instanceof Date ? formatarData(bruto) : typeof bruto === 'string' ? bruto.trim() : bruto;
+}
+
 function paraCondicoes(linhas: FormArray<CondicaoForm>): Condicao[] {
   return linhas.controls
     .filter(c => c.controls.categoriaId.value != null)
     .map(c => {
       const operador = c.controls.operador.value as Operador;
-      const bruto = c.controls.valor.value;
-      let valor: ValorCondicao | null = null;
-      if (operadorExigeValor(operador) && bruto != null) {
-        valor = bruto instanceof Date ? formatarData(bruto) : typeof bruto === 'string' ? bruto.trim() : bruto;
-      }
-      return { categoriaId: c.controls.categoriaId.value as string, operador, valor };
+      const valor = operadorExigeValor(operador) ? paraValor(c.controls.valor.value) : null;
+      const valorFim = operadorUsaIntervalo(operador) ? paraValor(c.controls.valorFim.value) : null;
+      return { categoriaId: c.controls.categoriaId.value as string, operador, valor, valorFim };
     });
 }
 

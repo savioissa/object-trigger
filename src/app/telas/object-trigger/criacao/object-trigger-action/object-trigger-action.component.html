@@ -1,16 +1,14 @@
-<div class="item-linha" [class.item-linha--leitura]="somenteLeitura" [formGroup]="form">
-  <div class="item-card acao">
-    <div class="acao__selecao">
+<div class="flex align-items-center gap-3" [formGroup]="form">
+  <div class="div-filter flex-1 min-w-0 flex flex-column">
+    <div class="flex align-items-start gap-3">
       <!-- Tipo -->
-      <div class="form-field">
-        <label class="form-overline" [for]="uid + '-tipo'">{{ 'portal.generic.label.type' | translate }}</label>
+      <div class="flex-1 flex flex-column gap-2 min-w-0">
+        <label class="equipment-event-label" [for]="uid + '-tipo'">{{ 'portal.generic.label.type' | translate }}</label>
         <p-dropdown
           formControlName="tipo"
           [inputId]="uid + '-tipo'"
           [options]="tiposAcao"
           appendTo="body"
-          styleClass="campo"
-          panelStyleClass="campo-painel"
         >
           <ng-template pTemplate="selectedItem" let-tipo>{{ tagTipoAcao[tipo] | translate }}</ng-template>
           <ng-template pTemplate="item" let-tipo>{{ tagTipoAcao[tipo] | translate }}</ng-template>
@@ -18,8 +16,8 @@
       </div>
 
       <!-- Valor (webhook cadastrado) -->
-      <div class="form-field">
-        <label class="form-overline" [for]="uid + '-webhook'">{{ 'portal.generic.label.value' | translate }}</label>
+      <div class="flex-1 flex flex-column gap-2 min-w-0">
+        <label class="equipment-event-label" [for]="uid + '-webhook'">{{ 'portal.generic.label.value' | translate }}</label>
         <p-dropdown
           formControlName="webhookId"
           [inputId]="uid + '-webhook'"
@@ -29,8 +27,6 @@
           [filter]="true"
           filterBy="nome"
           appendTo="body"
-          styleClass="campo"
-          panelStyleClass="campo-painel"
           [placeholder]="'portal.generic.placeholder.select-webhook' | translate"
           (onChange)="aoMudarWebhook()"
         />
@@ -38,24 +34,24 @@
     </div>
 
     @if (webhook; as wh) {
-      <div class="acao__detalhes">
-        <div class="acao__info">
-          <span class="acao__info-rotulo">{{ 'portal.generic.label.url' | translate }}</span>
-          <code class="acao__url">{{ wh.url }}</code>
+      <div class="flex flex-column gap-3 mt-3 pt-3 border-top-1 surface-border">
+        <div class="flex flex-column align-items-start gap-1 min-w-0">
+          <span class="card-label">{{ 'portal.generic.label.url' | translate }}</span>
+          <code class="acao__url max-w-full overflow-hidden text-overflow-ellipsis white-space-nowrap">{{ wh.url }}</code>
         </div>
 
-        <div class="acao__info">
-          <span class="acao__info-rotulo">{{ 'iclass.generic.label.description' | translate }}</span>
-          <span class="acao__info-valor">{{ wh.descricao }}</span>
+        <div class="flex flex-column align-items-start gap-1 min-w-0">
+          <span class="card-label">{{ 'iclass.generic.label.description' | translate }}</span>
+          <span class="card-input max-w-full overflow-hidden text-overflow-ellipsis white-space-nowrap">{{ wh.descricao }}</span>
         </div>
 
-        <div class="acao__info">
-          <span class="acao__info-rotulo">{{ 'portal.generic.label.method' | translate }}</span>
-          <span class="metodo" [class]="'metodo--' + wh.metodo.toLowerCase()">{{ wh.metodo }}</span>
+        <div class="flex flex-column align-items-start gap-1 min-w-0">
+          <span class="card-label">{{ 'portal.generic.label.method' | translate }}</span>
+          <span class="metodo inline-flex align-items-center px-2 border-1 border-round-sm" [class]="'metodo--' + wh.metodo.toLowerCase()">{{ wh.metodo }}</span>
         </div>
 
-        <div class="form-field">
-          <label class="acao__info-rotulo" [for]="uid + '-corpo'">{{ 'portal.generic.label.request-body-json' | translate }}</label>
+        <div class="flex flex-column gap-2 min-w-0">
+          <label class="t-label-field" [for]="uid + '-corpo'">{{ 'portal.generic.label.request-body-json' | translate }}</label>
           <app-object-trigger-json-editor
             formControlName="corpo"
             [inputId]="uid + '-corpo'"
@@ -63,14 +59,18 @@
             [describedBy]="exibirErro(form.controls.corpo) ? uid + '-corpo-erro' : undefined"
           />
           @if (exibirErro(form.controls.corpo)) {
-            <p class="form-error" [id]="uid + '-corpo-erro'">
+            <p class="caption restrictions-header-error m-0" [id]="uid + '-corpo-erro'">
               {{ (form.controls.corpo.hasError('json') ? 'portal.generic.label.invalid-json' : 'portal.generic.label.required-field') | translate }}
             </p>
           }
           @if (!somenteLeitura) {
-            <button type="button" class="link-btn acao__placeholders" (click)="verPlaceholders.emit()">
-              {{ 'portal.generic.label.view-available-placeholders' | translate }}
-            </button>
+            <button
+              pButton
+              type="button"
+              class="btn--text p-button-text align-self-start mt-1"
+              [label]="'portal.generic.label.view-available-placeholders' | translate"
+              (click)="verPlaceholders.emit()"
+            ></button>
           }
         </div>
       </div>
@@ -82,7 +82,7 @@
       pButton
       type="button"
       icon="pi pi-trash"
-      class="btn--md btn--danger btn--text"
+      class="btn--md btn--neutral flex-shrink-0"
       (click)="remover.emit()"
     ></button>
   }

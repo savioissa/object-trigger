@@ -1,101 +1,96 @@
 @if (carregando) {
-  <div class="pagina__conteudo" aria-busy="true">
-    <div aria-hidden="true">
-      <div class="dados">
-        <div class="esqueleto__campo">
-          <div class="skeleton esqueleto__rotulo"></div>
-          <div class="skeleton esqueleto__input"></div>
+  <div aria-busy="true">
+    <div class="page-content pb-7" aria-hidden="true">
+      <div class="grid">
+        <div class="col-6 flex flex-column gap-2">
+          <p-skeleton width="96px" height="14px" />
+          <p-skeleton height="42px" borderRadius="6px" />
         </div>
-        <div class="esqueleto__campo">
-          <div class="skeleton esqueleto__rotulo"></div>
-          <div class="skeleton esqueleto__input"></div>
+        <div class="col-6 flex flex-column gap-2">
+          <p-skeleton width="96px" height="14px" />
+          <p-skeleton height="42px" borderRadius="6px" />
         </div>
-        <div class="esqueleto__campo dados__largo">
-          <div class="skeleton esqueleto__rotulo"></div>
-          <div class="skeleton esqueleto__textarea"></div>
+        <div class="col-12 flex flex-column gap-2">
+          <p-skeleton width="96px" height="14px" />
+          <p-skeleton height="80px" borderRadius="6px" />
         </div>
       </div>
 
-      <hr class="divisor" />
+      <div class="summary-divider"></div>
 
-      <div class="secao">
-        <div class="secao__cabecalho">
-          <div class="skeleton esqueleto__titulo"></div>
-          <div class="skeleton esqueleto__subtitulo"></div>
+      <div class="flex flex-column gap-4">
+        <div class="flex flex-column gap-2 mb-1">
+          <p-skeleton width="140px" height="20px" />
+          <p-skeleton width="320px" height="14px" />
         </div>
-        <div class="skeleton esqueleto__bloco"></div>
-        <div class="skeleton esqueleto__bloco"></div>
+        <p-skeleton height="88px" borderRadius="10px" />
+        <p-skeleton height="88px" borderRadius="10px" />
       </div>
 
-      <hr class="divisor" />
+      <div class="summary-divider"></div>
 
-      <div class="secao">
-        <div class="secao__cabecalho">
-          <div class="skeleton esqueleto__titulo"></div>
-          <div class="skeleton esqueleto__subtitulo"></div>
+      <div class="flex flex-column gap-4">
+        <div class="flex flex-column gap-2 mb-1">
+          <p-skeleton width="140px" height="20px" />
+          <p-skeleton width="320px" height="14px" />
         </div>
-        <div class="skeleton esqueleto__bloco"></div>
+        <p-skeleton height="88px" borderRadius="10px" />
       </div>
     </div>
   </div>
 } @else {
-  <div class="pagina__conteudo" [formGroup]="form">
+  <div class="page-content pb-7" [formGroup]="form">
     <!-- Dados gerais -->
-    <div class="dados">
-      <div class="form-field">
-        <label class="form-label" [for]="uid + '-descricao'">
-          {{ 'iclass.generic.label.description' | translate }}<span class="form-label__required" aria-hidden="true">*</span>
-        </label>
+    <div class="grid">
+      <div class="col-6 flex flex-column gap-2 min-w-0">
+        <label class="t-label-field required" [for]="uid + '-descricao'">{{ 'iclass.generic.label.description' | translate }}</label>
         <input
           pInputText
           [id]="uid + '-descricao'"
           type="text"
-          class="campo"
+          class="ui-input w-full"
           formControlName="descricao"
-          [class.campo--invalido]="exibirErro(form.controls.descricao)"
           [attr.aria-describedby]="exibirErro(form.controls.descricao) ? uid + '-descricao-erro' : null"
           [placeholder]="'portal.generic.placeholder.trigger-description' | translate"
         />
         @if (exibirErro(form.controls.descricao)) {
-          <p class="form-error" [id]="uid + '-descricao-erro'">{{ 'portal.generic.label.required-field' | translate }}</p>
+          <p class="caption restrictions-header-error m-0" [id]="uid + '-descricao-erro'">{{ 'portal.generic.label.required-field' | translate }}</p>
         }
       </div>
 
-      <div class="form-field">
-        <label class="form-label" [for]="uid + '-status'">{{ 'portal.generic.label.status' | translate }}</label>
+      <div class="col-6 flex flex-column gap-2 min-w-0">
+        <label class="t-label-field" [for]="uid + '-status'">{{ 'portal.generic.label.status' | translate }}</label>
         <p-dropdown
           [inputId]="uid + '-status'"
           formControlName="status"
           [options]="statusOpcoes"
           appendTo="body"
-          styleClass="campo"
-          panelStyleClass="campo-painel"
         >
           <ng-template pTemplate="selectedItem" let-status>{{ tagStatus[status] | translate }}</ng-template>
           <ng-template pTemplate="item" let-status>{{ tagStatus[status] | translate }}</ng-template>
         </p-dropdown>
       </div>
 
-      <div class="form-field dados__largo">
-        <label class="form-label" [for]="uid + '-observacoes'">{{ 'portal.generic.label.notes' | translate }}</label>
+      <div class="col-12 flex flex-column gap-2 min-w-0">
+        <label class="t-label-field" [for]="uid + '-observacoes'">{{ 'portal.generic.label.notes' | translate }}</label>
         <textarea
           pInputTextarea
           [id]="uid + '-observacoes'"
           rows="3"
-          class="campo-textarea"
+          class="ui-input w-full"
           formControlName="observacoes"
           [placeholder]="'portal.generic.placeholder.trigger-notes' | translate"
         ></textarea>
       </div>
     </div>
 
-    <hr class="divisor" />
+    <div class="summary-divider"></div>
 
     <!-- Condições -->
-    <section class="secao" [attr.aria-labelledby]="uid + '-condicoes-titulo'">
-      <div class="secao__cabecalho">
-        <h2 class="t-title-sm secao__titulo" [id]="uid + '-condicoes-titulo'">{{ 'portal.generic.label.conditions' | translate }}</h2>
-        <p class="secao__subtitulo">{{ 'portal.generic.label.conditions-set-trigger-execution' | translate }}</p>
+    <section class="flex flex-column gap-4" [attr.aria-labelledby]="uid + '-condicoes-titulo'">
+      <div class="flex flex-column gap-2 mb-1">
+        <h2 class="t-title-sm m-0" [id]="uid + '-condicoes-titulo'">{{ 'portal.generic.label.conditions' | translate }}</h2>
+        <p class="description-medium m-0">{{ 'portal.generic.label.conditions-set-trigger-execution' | translate }}</p>
       </div>
 
       <app-object-trigger-condition-group
@@ -112,17 +107,17 @@
       />
     </section>
 
-    <hr class="divisor" />
+    <div class="summary-divider"></div>
 
     <!-- Ações -->
-    <section class="secao" [attr.aria-labelledby]="uid + '-acoes-titulo'">
-      <div class="secao__cabecalho">
-        <h2 class="t-title-sm secao__titulo" [id]="uid + '-acoes-titulo'">{{ 'portal.generic.label.actions' | translate }}</h2>
-        <p class="secao__subtitulo">{{ 'portal.generic.label.define-trigger-actions' | translate }}</p>
+    <section class="flex flex-column gap-4" [attr.aria-labelledby]="uid + '-acoes-titulo'">
+      <div class="flex flex-column gap-2 mb-1">
+        <h2 class="t-title-sm m-0" [id]="uid + '-acoes-titulo'">{{ 'portal.generic.label.actions' | translate }}</h2>
+        <p class="description-medium m-0">{{ 'portal.generic.label.define-trigger-actions' | translate }}</p>
       </div>
 
-      <div class="acoes" [class.acoes--com-painel]="painelAberto">
-        <div class="acoes__lista">
+      <div class="flex align-items-start gap-3">
+        <div class="flex-1 min-w-0 flex flex-column gap-3">
           @for (acao of form.controls.acoes.controls; track acao; let i = $index) {
             <app-object-trigger-action
               [form]="acao"
@@ -134,15 +129,14 @@
           }
           @if (somenteLeitura) {
             @if (!form.controls.acoes.length) {
-              <p class="acoes__vazio">{{ 'portal.generic.label.no-actions' | translate }}</p>
+              <p class="description-medium m-0">{{ 'portal.generic.label.no-actions' | translate }}</p>
             }
           } @else {
-            <div>
+            <div class="customer-portal-button-positive-color">
               <button
                 pButton
                 type="button"
                 icon="pi pi-plus"
-                class="btn--dashed"
                 [label]="'portal.generic.label.add-action' | translate"
                 (click)="adicionarAcao()"
               ></button>
@@ -152,7 +146,7 @@
 
         @if (painelAberto && !somenteLeitura) {
           <app-object-trigger-placeholders-panel
-            class="acoes__painel"
+            class="acoes__painel sticky w-30rem flex-shrink-0"
             [grupos]="placeholders"
             (fechar)="painelAberto = false"
           />

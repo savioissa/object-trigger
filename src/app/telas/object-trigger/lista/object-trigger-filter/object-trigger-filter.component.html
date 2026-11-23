@@ -1,34 +1,34 @@
-<div class="filter-panel">
-  <div class="filter-panel__field">
-    <label class="filter-panel__label" [for]="uid + '-descricao'">{{ 'iclass.generic.label.description' | translate }}</label>
-    <div class="filter-panel__control">
+<div class="div-filter">
+  <div class="grid">
+    <div class="col-6 flex flex-column gap-1">
+      <label class="filter-panel__label" [for]="uid + '-descricao'">{{ 'iclass.generic.label.description' | translate }}</label>
       <input
         pInputText
         type="text"
-        class="filter-panel__input"
+        class="filter-panel__input w-full"
         [id]="uid + '-descricao'"
         [ngModel]="filtro.descricao"
         (ngModelChange)="aoMudarDescricao($event)"
         [placeholder]="'portal.generic.placeholder.search' | translate"
       />
     </div>
-  </div>
 
-  <div class="filter-panel__field">
-    <label class="filter-panel__label" [for]="uid + '-status'">{{ 'portal.generic.label.status' | translate }}</label>
-    <p-dropdown
-      [inputId]="uid + '-status'"
-      [options]="statusOpcoes"
-      [ngModel]="filtro.status"
-      (ngModelChange)="aoMudarStatus($event)"
-      [showClear]="true"
-      appendTo="body"
-      styleClass="sort-panel__select"
-      panelStyleClass="sort-panel__select-panel"
-      [placeholder]="'portal.generic.label.select' | translate"
-    >
-      <ng-template pTemplate="selectedItem" let-status>{{ tagStatus[status] | translate }}</ng-template>
-      <ng-template pTemplate="item" let-status>{{ tagStatus[status] | translate }}</ng-template>
-    </p-dropdown>
+    <div class="col-6 flex flex-column gap-1">
+      <label class="filter-panel__label" [for]="uid + '-status'">{{ 'portal.generic.label.status' | translate }}</label>
+      <p-dropdown
+        class="filter-panel__operator"
+        [inputId]="uid + '-status'"
+        [options]="statusOpcoes"
+        [ngModel]="filtro.status"
+        (ngModelChange)="aoMudarStatus($event)"
+        [showClear]="true"
+        appendTo="body"
+        panelStyleClass="filter-panel__operator-panel"
+        [placeholder]="'portal.generic.label.select' | translate"
+      >
+        <ng-template pTemplate="selectedItem" let-status>{{ tagStatus[status] | translate }}</ng-template>
+        <ng-template pTemplate="item" let-status>{{ tagStatus[status] | translate }}</ng-template>
+      </p-dropdown>
+    </div>
   </div>
 </div>

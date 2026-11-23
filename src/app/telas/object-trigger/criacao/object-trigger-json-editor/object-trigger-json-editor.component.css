@@ -2,13 +2,11 @@
   display: block;
 }
 
+/* Editor: cores da borda e do fundo nos estados (arranjo, borda e cantos vêm do PrimeFlex) */
 .json-editor {
   --json-font: 400 13px/22px ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
   --json-padding-y: 10px;
-  display: flex;
-  overflow: hidden;
-  border: 1px solid #CBD5E1;
-  border-radius: 6px;
+  border-color: #CBD5E1;
   background: #fff;
 }
 .json-editor:hover {
@@ -21,37 +19,23 @@
 .json-editor--invalido, .json-editor--invalido:hover {
   border-color: #DC2626;
 }
-.json-editor--desabilitado {
-  opacity: 0.6;
-}
 
+/* Números das linhas */
 .json-editor__gutter {
-  flex: 0 0 auto;
   min-width: 28px;
   padding: var(--json-padding-y) 8px var(--json-padding-y) 10px;
-  overflow: hidden;
   background: #F8FAFC;
   border-right: 1px solid #E5E7EB;
   color: #94A3B8;
   font: var(--json-font);
-  text-align: right;
-  user-select: none;
   box-sizing: border-box;
 }
-.json-editor__gutter span {
-  display: block;
-}
 
+/* Área de digitação */
 .json-editor__area {
-  flex: 1 1 auto;
-  min-width: 0;
   min-height: 150px;
-  margin: 0;
   padding: var(--json-padding-y) 14px;
-  border: 0;
-  outline: none;
   resize: vertical;
-  background: transparent;
   color: #1E293B;
   font: var(--json-font);
   white-space: pre;

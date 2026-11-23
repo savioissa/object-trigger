@@ -1,12 +1,16 @@
-<div class="json-editor" [class.json-editor--invalido]="invalido" [class.json-editor--desabilitado]="desabilitado()">
-  <div #gutter class="json-editor__gutter" aria-hidden="true">
+<div
+  class="json-editor flex overflow-hidden border-1 border-round"
+  [class.json-editor--invalido]="invalido"
+  [class.opacity-60]="desabilitado()"
+>
+  <div #gutter class="json-editor__gutter flex-none overflow-hidden text-right select-none" aria-hidden="true">
     @for (linha of linhas(); track linha) {
-      <span>{{ linha }}</span>
+      <span class="block">{{ linha }}</span>
     }
   </div>
   <textarea
     #area
-    class="json-editor__area"
+    class="json-editor__area flex-1 min-w-0 m-0 border-none outline-none bg-transparent"
     [id]="inputId"
     [rows]="rows"
     [disabled]="desabilitado()"

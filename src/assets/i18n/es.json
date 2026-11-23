@@ -13,10 +13,15 @@
   "iclass": {
     "generic": {
       "label": {
+        "between": "Entre",
         "copied-to-clipboard": "Copiado al portapapeles",
         "description": "Descripción",
         "discard-changes": "Descartar cambios",
-        "select-operator": "Operador"
+        "from": "De",
+        "greater-than-or-equal-to": "Mayor o igual a",
+        "less-than-or-equal-to": "Menor o igual a",
+        "select-operator": "Operador",
+        "to": "Hasta"
       }
     }
   },
@@ -98,13 +103,10 @@
         "no-keep-editing": "No, seguir editando",
         "notes": "Observación",
         "operator-absent": "Ausente",
-        "operator-changed": "Modificado",
-        "operator-changed-from": "Modificado de",
-        "operator-changed-to": "Modificado a",
+        "operator-between-or-equal": "Entre o igual",
         "operator-different": "Diferente",
-        "operator-not-changed": "No modificado",
-        "operator-not-changed-from": "No modificado de",
-        "operator-not-changed-to": "No modificado a",
+        "operator-equal-ignore-case": "Es igual a (sin distinguir mayúsculas)",
+        "operator-not-equal-ignore-case": "Es diferente de (sin distinguir mayúsculas)",
         "operator-present": "Presente",
         "request-body-json": "Cuerpo de la solicitud (JSON)",
         "required-field": "Campo obligatorio.",
