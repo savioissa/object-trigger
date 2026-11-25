@@ -1,6 +1,4 @@
 :host {
-  /* Altura do page-header com o rótulo "Gatilho" acima do título; o painel de placeholders fica logo abaixo */
-  --cabecalho-altura: 86px;
   display: block;
   min-height: 100vh;
   background: #fff;

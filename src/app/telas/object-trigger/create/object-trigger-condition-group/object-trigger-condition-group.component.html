@@ -1,0 +1,39 @@
+<div class="flex flex-column gap-3" role="group" [attr.aria-labelledby]="uid + '-titulo'">
+  <h3 class="medium m-0" [id]="uid + '-titulo'">{{ titulo }}</h3>
+
+  @if (condicoes.length) {
+    <div class="flex flex-column gap-3">
+      @for (condicao of condicoes.controls; track condicao; let i = $index) {
+        <div class="flex align-items-center gap-3">
+          <app-object-trigger-condition class="flex-1 min-w-0" [condicao]="condicao" [gruposCategoria]="gruposCategoria" />
+
+          @if (!somenteLeitura) {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="btn--md btn--neutral flex-shrink-0"
+              (click)="remover(i)"
+            ></button>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (somenteLeitura) {
+    @if (!condicoes.length) {
+      <p class="description-medium m-0">{{ 'portal.generic.label.no-conditions' | translate }}</p>
+    }
+  } @else {
+    <div class="customer-portal-button-positive-color">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        [label]="'portal.generic.label.add-condition' | translate"
+        (click)="adicionar()"
+      ></button>
+    </div>
+  }
+</div>

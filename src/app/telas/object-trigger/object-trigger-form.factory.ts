@@ -138,7 +138,7 @@ export function sincronizarCorpoAcao(acao: AcaoForm): void {
 export function criarObjectTriggerForm(): ObjectTriggerForm {
   return new FormGroup({
     descricao: new FormControl<string>('', { nonNullable: true, validators: obrigatorio }),
-    status: new FormControl<StatusObjectTrigger>('ATIVO', { nonNullable: true }),
+    status: new FormControl<StatusObjectTrigger>('EM_EDICAO', { nonNullable: true }),
     observacoes: new FormControl<string>('', { nonNullable: true }),
     todas: new FormArray<CondicaoForm>([]),
     qualquer: new FormArray<CondicaoForm>([]),

@@ -1,0 +1,33 @@
+<div class="flex flex-column gap-3">
+  @for (acao of acoes.controls; track acao; let i = $index) {
+    <div class="flex align-items-center gap-3">
+      <app-object-trigger-action class="flex-1 min-w-0" [form]="acao" [webhooks]="webhooks" />
+
+      @if (!somenteLeitura) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-trash"
+          class="btn--md btn--neutral flex-shrink-0"
+          (click)="remover(i)"
+        ></button>
+      }
+    </div>
+  }
+
+  @if (somenteLeitura) {
+    @if (!acoes.length) {
+      <p class="description-medium m-0">{{ 'portal.generic.label.no-actions' | translate }}</p>
+    }
+  } @else {
+    <div class="customer-portal-button-positive-color">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        [label]="'portal.generic.label.add-action' | translate"
+        (click)="adicionar()"
+      ></button>
+    </div>
+  }
+</div>

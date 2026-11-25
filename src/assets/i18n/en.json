@@ -14,7 +14,6 @@
     "generic": {
       "label": {
         "between": "Between",
-        "copied-to-clipboard": "Copied to clipboard",
         "description": "Description",
         "discard-changes": "Discard changes",
         "from": "From",
@@ -77,12 +76,10 @@
         "all-conditions-satisfied": "All conditions must be satisfied",
         "any-condition-satisfied": "Any condition must be satisfied",
         "ascending": "Ascending",
-        "available-placeholders": "Available placeholders",
         "category": "Category",
+        "clean-filters": "Clean Filters",
         "conditions": "Conditions",
         "conditions-set-trigger-execution": "The conditions determine when a trigger should be executed",
-        "copied": "Copied",
-        "copy-placeholder-manually": "Select the placeholder code and copy it manually.",
         "define-trigger-actions": "What happens when the conditions are met.",
         "descending": "Descending",
         "empty-trigger-list": "No triggers registered",
@@ -111,6 +108,7 @@
         "request-body-json": "Request body (JSON)",
         "required-field": "Required field.",
         "select": "Select",
+        "selected-filters": "Selected filters",
         "sort-by": "Sort by",
         "status": "Status",
         "trigger": "Trigger",
@@ -122,11 +120,10 @@
         "unable-load-form-options": "Could not load the form options.",
         "unable-load-triggers": "Could not load the triggers. Please try again.",
         "unable-save-trigger": "Could not save the trigger. Please try again.",
-        "unable-to-copy": "Could not copy",
         "unsaved-changes-will-be-lost": "There are unsaved changes. If you leave now, they will be lost.",
         "url": "URL",
         "value": "Value",
-        "view-available-placeholders": "View available placeholders"
+        "in-edit": "Editing"
       },
       "placeholder": {
         "number-value": "0",

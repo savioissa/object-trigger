@@ -1,0 +1,23 @@
+<div class="flex flex-column gap-2 min-w-0">
+  <label class="equipment-event-label" [for]="uid">{{ 'portal.generic.label.category' | translate }}</label>
+  <p-dropdown
+    [formControl]="controle"
+    [inputId]="uid"
+    [options]="grupos"
+    [group]="true"
+    optionGroupLabel="label"
+    optionGroupChildren="itens"
+    optionLabel="label"
+    optionValue="id"
+    appendTo="body"
+    [class.field-invalid]="exibirErro(controle)"
+    [placeholder]="'portal.createso.placeholder.find-category' | translate"
+    (onChange)="categoriaChange.emit()"
+  >
+    <!-- Selecionado mostra "Grupo > Campo", como no layout -->
+    <ng-template pTemplate="selectedItem" let-categoria>{{ categoria.grupo }} &gt; {{ categoria.label }}</ng-template>
+  </p-dropdown>
+  @if (exibirErro(controle)) {
+    <p class="caption restrictions-header-error m-0">{{ 'portal.generic.label.required-field' | translate }}</p>
+  }
+</div>

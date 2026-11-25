@@ -5,7 +5,7 @@
     <button
       pButton
       type="button"
-      routerLink="/object-trigger/novo"
+      routerLink="/object-trigger/register"
       icon="pi pi-plus"
       class="btn--md btn--primary header-btn"
       [label]="'portal.generic.label.new' | translate"
@@ -42,16 +42,22 @@
       [label]="'portal.generic.button.refresh' | translate"
       [loading]="carregando"
       [disabled]="carregando"
-      (click)="carregar()"
+      (click)="atualizar()"
     ></button>
   </div>
 </header>
 
 <div class="page-content">
-  @if (filtrosAbertos || ordenacaoAberta) {
+  @if (filtrosAbertos || ordenacaoAberta || temFiltroPreenchido) {
     <div class="list-stack">
-      @if (filtrosAbertos) {
-        <app-object-trigger-filter [filtro]="filtro" (filtroChange)="aoMudarFiltro($event)" />
+      <!-- Com o painel fechado, o filtro continua visível só com a linha de "Filtros selecionados" -->
+      @if (filtrosAbertos || temFiltroPreenchido) {
+        <app-object-trigger-filter
+          [filtro]="rascunho"
+          [aberto]="filtrosAbertos"
+          (filtroChange)="aoMudarFiltro($event)"
+          (aplicar)="aoAplicarFiltro($event)"
+        />
       }
 
       @if (ordenacaoAberta) {

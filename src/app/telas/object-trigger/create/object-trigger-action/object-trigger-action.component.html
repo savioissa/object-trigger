@@ -1,0 +1,68 @@
+<div class="div-filter flex flex-column" [formGroup]="form">
+  <div class="grid">
+    <!-- Tipo -->
+    <div class="col-6 flex flex-column gap-2 min-w-0">
+      <label class="equipment-event-label" [for]="uid + '-tipo'">{{ 'portal.generic.label.type' | translate }}</label>
+      <p-dropdown
+        formControlName="tipo"
+        [inputId]="uid + '-tipo'"
+        [options]="tiposAcao"
+        appendTo="body"
+      >
+        <ng-template pTemplate="selectedItem" let-tipo>{{ tagTipoAcao[tipo] | translate }}</ng-template>
+        <ng-template pTemplate="item" let-tipo>{{ tagTipoAcao[tipo] | translate }}</ng-template>
+      </p-dropdown>
+    </div>
+
+    <!-- Valor (webhook cadastrado) -->
+    <div class="col-6 flex flex-column gap-2 min-w-0">
+      <label class="equipment-event-label" [for]="uid + '-webhook'">{{ 'portal.generic.label.value' | translate }}</label>
+      <p-dropdown
+        formControlName="webhookId"
+        [inputId]="uid + '-webhook'"
+        [options]="webhooks"
+        optionLabel="nome"
+        optionValue="id"
+        [filter]="true"
+        filterBy="nome"
+        appendTo="body"
+        [placeholder]="'portal.generic.placeholder.select-webhook' | translate"
+        (onChange)="aoMudarWebhook()"
+      />
+    </div>
+  </div>
+
+  @if (webhook; as wh) {
+    <div class="flex flex-column gap-3 mt-3 pt-3 border-top-1 surface-border">
+      <div class="flex flex-column align-items-start gap-1 min-w-0">
+        <span class="card-label">{{ 'portal.generic.label.url' | translate }}</span>
+        <code class="acao__url max-w-full overflow-hidden text-overflow-ellipsis white-space-nowrap">{{ wh.url }}</code>
+      </div>
+
+      <div class="flex flex-column align-items-start gap-1 min-w-0">
+        <span class="card-label">{{ 'iclass.generic.label.description' | translate }}</span>
+        <span class="card-input max-w-full overflow-hidden text-overflow-ellipsis white-space-nowrap">{{ wh.descricao }}</span>
+      </div>
+
+      <div class="flex flex-column align-items-start gap-1 min-w-0">
+        <span class="card-label">{{ 'portal.generic.label.method' | translate }}</span>
+        <span class="metodo inline-flex align-items-center px-2 border-1 border-round-sm" [class]="'metodo--' + wh.metodo.toLowerCase()">{{ wh.metodo }}</span>
+      </div>
+
+      <div class="flex flex-column gap-2 min-w-0">
+        <label class="t-label-field" [for]="uid + '-corpo'">{{ 'portal.generic.label.request-body-json' | translate }}</label>
+        <app-object-trigger-json-editor
+          formControlName="corpo"
+          [inputId]="uid + '-corpo'"
+          [invalido]="exibirErro(form.controls.corpo)"
+          [describedBy]="exibirErro(form.controls.corpo) ? uid + '-corpo-erro' : undefined"
+        />
+        @if (exibirErro(form.controls.corpo)) {
+          <p class="caption restrictions-header-error m-0" [id]="uid + '-corpo-erro'">
+            {{ (form.controls.corpo.hasError('json') ? 'portal.generic.label.invalid-json' : 'portal.generic.label.required-field') | translate }}
+          </p>
+        }
+      </div>
+    </div>
+  }
+</div>

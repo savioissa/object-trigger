@@ -1,7 +1,0 @@
-:host {
-  /* Altura do page-header (16 + 32 + 16 + 1 de borda); o painel de placeholders fica logo abaixo */
-  --cabecalho-altura: 65px;
-  display: block;
-  min-height: 100vh;
-  background: #fff;
-}

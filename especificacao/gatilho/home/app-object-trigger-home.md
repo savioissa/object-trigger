@@ -3,16 +3,16 @@
 ### Aplicação
 Contêiner da página do gatilho. Mostra o gatilho salvo com o mesmo formulário da criação,
 em somente leitura, e permite editá-lo: "Editar" libera os campos; em edição, "Cancelar"
-descarta as alterações e "Salvar" grava.
+descarta as alterações (pedindo confirmação, se houver alguma) e "Salvar" grava.
 
 ### Componentização
 | Componente                 | Tipo    | Onde é usado |
 | -------------------------- | ------- | ------------ |
-| `app-object-trigger-fields` | Interno | Corpo da página, em somente leitura ou em edição (`../criacao/app-object-trigger-fields.md`) |
+| `app-object-trigger-form`  | Interno | Corpo da página, em somente leitura ou em edição (`../form/app-object-trigger-form.md`) |
 | `p-button`                 | Externo | Botões "Editar", "Cancelar" e "Salvar" |
 | `p-skeleton`               | Externo | Título da página no estado Carregando |
 | `p-toast`                  | Externo | Mensagens de sucesso e erro (o `p-toast` fica na raiz da aplicação, no canto superior direito) |
-| `p-confirmDialog`          | Externo | Confirmação ao sair com alterações não salvas (o `p-confirmDialog` fica na raiz da aplicação, um só para todas as páginas, com 420px de largura) |
+| `p-confirmDialog`          | Externo | Confirmação ao sair ou cancelar a edição com alterações não salvas (o `p-confirmDialog` fica na raiz da aplicação, um só para todas as páginas, com 420px de largura) |
 
 ### Elementos
 
@@ -23,7 +23,7 @@ descarta as alterações e "Salvar" grava.
   border-round-sm no-underline` (PrimeFlex) e `.pagina__voltar`; ícone azul (`#2563EB`) de 1rem
   (`text-base`, PrimeFlex), sem borda nem fundo.
 - **Comportamento:** ao clicar, volta para a lista de gatilhos (`/object-trigger`; ver
-  `../lista/README.md`). Em edição com alterações não salvas, antes pede confirmação (ver
+  `../README.md` › Lista). Em edição com alterações não salvas, antes pede confirmação (ver
   Comportamentos › Saída com alterações não salvas).
 
 #### Nome do objeto
@@ -51,8 +51,12 @@ descarta as alterações e "Salvar" grava.
 - **Tag:** `portal.generic.button.cancel`
 - **Componente:** `p-button`
 - **CSS:** `btn--md btn--secondary`
-- **Comportamento:** ao clicar, descarta todas as alterações, sem confirmação, e volta para
-  somente leitura com os dados salvos.
+- **Comportamento:** ao clicar sem nenhuma alteração em relação ao gatilho salvo (a mesma
+  comparação do botão "Salvar"), volta direto para somente leitura. Com alguma alteração,
+  antes abre a confirmação de descarte (ver Comportamentos › Confirmação de descarte):
+  "Descartar" descarta todas as alterações e volta para somente leitura com os dados
+  salvos; "Não, continuar editando" (ou fechar pelo X ou Esc) mantém a edição com as
+  alterações.
 - **Regras:** só aparece em edição; desabilitado durante o salvamento.
 
 #### Botão "Salvar"
@@ -71,7 +75,7 @@ descarta as alterações e "Salvar" grava.
   - Só aparece em edição.
   - Habilitado só quando, ao mesmo tempo: há alguma alteração em relação ao gatilho salvo;
     e as mesmas regras do botão "Criar" são atendidas (ver
-    `../criacao/app-object-trigger-form.md` › Botão "Criar"). Se o usuário desfaz a
+    `../create/app-object-trigger-create.md` › Botão "Criar"). Se o usuário desfaz a
     alteração, o botão volta a ficar desabilitado.
   - Alteração é comparada pelo que seria salvo: espaços nas pontas, linhas sem categoria e
     ações sem webhook não contam como alteração.
@@ -79,8 +83,8 @@ descarta as alterações e "Salvar" grava.
   - Desabilitado, não tem tooltip (decisão do time).
 
 #### Corpo do formulário
-- **Componente:** `app-object-trigger-fields`, preenchido com o gatilho salvo; em somente
-  leitura fora do modo de edição.
+- **Componente:** `app-object-trigger-form`, recebendo o formulário preenchido com o gatilho salvo, as categorias, os webhooks, o
+  carregamento e, fora do modo de edição, somente leitura.
 - **Regras:** fora do modo de edição, os campos ficam desabilitados, com a aparência padrão
   do PrimeNG (opacidade de 60%); em edição, voltam ao normal.
 
@@ -99,37 +103,40 @@ A página ocupa a altura toda da tela, com fundo branco, e tem três partes:
 2. **Barra de ações (`page-header__actions`, com `justify-content-end pt-3 px-5`,
    PrimeFlex; abaixo da linha do cabeçalho, alinhada à direita, não fixa):** "Editar" em somente leitura; "Cancelar" e
    "Salvar", com 8px entre eles, em edição.
-3. **Corpo (abaixo da barra, largura toda):** `app-object-trigger-fields`.
+3. **Corpo (abaixo da barra, largura toda):** `app-object-trigger-form`.
 
 ### Estados
 | Estado                  | Quando                                                              | O que deve ser exibido |
 | ----------------------- | ------------------------------------------------------------------- | ---------------------- |
-| Carregando              | Enquanto o gatilho e as opções do formulário são buscados           | Nome do objeto e um `p-skeleton` de 320 × 24px no lugar do título; sem barra de ações; corpo no estado Carregando de `app-object-trigger-fields` |
-| Leitura                 | Gatilho carregado, fora do modo de edição                           | Botão "Editar"; corpo no estado Somente leitura de `app-object-trigger-fields` |
-| Edição                  | O usuário clicou em "Editar"                                        | "Cancelar" e "Salvar" (desabilitado até haver alteração válida); corpo no estado Edição |
+| Carregando              | Enquanto o gatilho e as opções do formulário são buscados           | Nome do objeto e um `p-skeleton` de 320 × 24px no lugar do título; sem barra de ações; corpo no estado Carregando de `app-object-trigger-form` |
+| Leitura                 | Gatilho carregado, fora do modo de edição                           | Botão "Editar"; corpo no estado Somente leitura de `app-object-trigger-form` |
+| Edição                  | O usuário clicou em "Editar"                                        | "Cancelar" e "Salvar" (desabilitado até haver alteração válida); corpo no estado Edição de `app-object-trigger-form` |
 | Salvando                | Depois do clique em "Salvar", até a resposta                        | "Salvar" com indicador e desabilitado; "Cancelar" desabilitado |
-| Erro de validação       | Em edição, um campo obrigatório ficou vazio ou inválido             | Erro no campo (estado Campo com erro de `app-object-trigger-fields`); "Salvar" desabilitado |
+| Erro de validação       | Em edição, um campo obrigatório ficou vazio ou inválido             | Erro no campo (estado Campo com erro de `app-object-trigger-form`); "Salvar" desabilitado |
 | Erro ao salvar          | A gravação falhou                                                   | Toast de erro (`portal.generic.label.error-saving-trigger` / `portal.generic.label.unable-save-trigger`); continua em edição com os dados |
-| Erro ao carregar opções | A busca das categorias, dos webhooks ou dos placeholders falhou     | Toast de erro com o título `portal.generic.label.error-loading-data` e o texto `portal.generic.label.unable-load-form-options`; a página abre sem opções nos campos que dependem delas |
+| Erro ao carregar opções | A busca das categorias ou dos webhooks falhou                       | Toast de erro com o título `portal.generic.label.error-loading-data` e o texto `portal.generic.label.unable-load-form-options`; a página abre sem opções nos campos que dependem delas |
 | Não encontrado          | Não existe gatilho com o identificador do endereço                  | Cabeçalho só com "Voltar" e o nome do objeto; sem barra de ações; ícone `pi pi-search` e `portal.generic.results-not-found` no lugar do corpo |
 
 ### Comportamentos
-- **Saída com alterações não salvas.** **Dado** a página em edição com alguma alteração em
-  relação ao gatilho salvo (a mesma comparação do botão "Salvar"), **quando** o usuário sai
-  da página por qualquer caminho dentro da aplicação (botão "Voltar", menu ou outro
-  endereço), **então** abre a confirmação (`p-confirmDialog`), com textos genéricos para
-  poder ser reaproveitada por outras páginas:
+- **Confirmação de descarte.** **Dado** a página em edição com alguma alteração em
+  relação ao gatilho salvo (a mesma comparação do botão "Salvar"), **quando** o usuário
+  clica em "Cancelar" ou sai da página por qualquer caminho dentro da aplicação (botão
+  "Voltar", menu ou outro endereço), **então** abre a confirmação (`p-confirmDialog`), com
+  textos genéricos para poder ser reaproveitada por outras páginas:
   - título `iclass.generic.label.discard-changes`;
-  - ícone `pi pi-exclamation-triangle` e a mensagem
-    `portal.generic.label.unsaved-changes-will-be-lost`;
+  - a mensagem `portal.generic.label.unsaved-changes-will-be-lost`, sem ícone e alinhada ao
+    título (classe global `confirmacao-generica` no `p-confirmDialog`, com
+    `.confirmacao-generica .p-confirm-dialog-message { margin-left: 0; }`);
   - botão `portal.generic.label.no-keep-editing` (`btn--md btn--secondary`), que
     recebe o foco ao abrir: fecha a confirmação e o usuário continua em edição, com as
     alterações;
-  - botão `portal.generic.button.discard` (`btn--md btn--danger`): sai e descarta
-    as alterações;
+  - botão `portal.generic.button.discard` (`btn--md btn--danger`): descarta as
+    alterações e, no "Cancelar", volta para somente leitura com os dados salvos; nos
+    demais casos, sai da página;
   - fechar pelo X ou pela tecla Esc equivale a continuar editando.
 - **Dado** a página em edição sem nenhuma alteração, ou fora do modo de edição, **quando**
-  o usuário sai da página, **então** sai direto, sem confirmação.
+  o usuário clica em "Cancelar" ou sai da página, **então** a ação acontece direto, sem
+  confirmação.
 - **Dado** a página em edição com alterações não salvas, **quando** o usuário recarrega ou
   fecha a aba do navegador, **então** o navegador mostra o seu aviso padrão de saída (o
   texto é do navegador e não pode ser personalizado).

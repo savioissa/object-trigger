@@ -1,926 +1,1497 @@
-import { GrupoCategoria, GrupoPlaceholder, ObjectTrigger, Webhook } from './object-trigger.model';
+import { ObjectTriggerDTO, ObjectTriggerFieldDTO, WebhookDTO } from './object-trigger.dto';
 
-/* Dados fictícios usados pelo ObjectTriggerService enquanto a API não existe.
-   Os textos aqui simulam o que a API devolveria, por isso não passam pelo arquivo de tradução.
-   Só valores fixos (sem funções nem constantes): a aba Dados do prototipador lê este arquivo. */
+/* Dados fictícios no formato dos DTOs da API, usados pelo ObjectTriggerService enquanto a API
+   não existe. Os textos simulam o que a API devolveria, por isso não passam pelo arquivo de
+   tradução. Só valores fixos (sem funções, constantes nem enums): a aba Dados do
+   prototipador lê este arquivo. Os códigos dos enums estão em object-trigger.dto.ts.
+   Os códigos de status da OS em `value1` são fictícios (Concluída = 7, como no exemplo da API);
+   os nomes deles ficam em object-trigger.conversao.ts. */
 
-export const CATEGORIAS_MOCK: GrupoCategoria[] = [
+/** Campos que podem ser observados em condições (GET ../portal/objecttriggerfields). */
+export const OBJECT_TRIGGER_FIELDS_MOCK: ObjectTriggerFieldDTO[] = [
   {
-    label: 'Ordem de serviço',
-    itens: [
-      {
-        id: 'os.status',
-        label: 'Status',
-        grupo: 'Ordem de serviço',
-        tipo: 'LISTA',
-        valores: [
-          {
-            id: 'ABERTA',
-            label: 'Aberta'
-          },
-          {
-            id: 'AGENDADA',
-            label: 'Agendada'
-          },
-          {
-            id: 'ATENDIMENTO',
-            label: 'Atendimento'
-          },
-          {
-            id: 'APROVACAO',
-            label: 'Aprovação'
-          },
-          {
-            id: 'FILA_TECNICO',
-            label: 'Fila técnico'
-          },
-          {
-            id: 'DESLOCAMENTO',
-            label: 'Deslocamento'
-          },
-          {
-            id: 'DESPACHADA',
-            label: 'Despachada'
-          },
-          {
-            id: 'VINCULADA_CREDENCIADA',
-            label: 'Vinculada credenciada'
-          },
-          {
-            id: 'EM_ANALISE',
-            label: 'Em análise'
-          },
-          {
-            id: 'CONCLUIDA',
-            label: 'Concluída'
-          },
-          {
-            id: 'ENCERRADA',
-            label: 'Encerrada'
-          },
-          {
-            id: 'PARALISADA',
-            label: 'Paralisada'
-          },
-          {
-            id: 'PRE_ABERTA',
-            label: 'Pré-aberta'
-          },
-          {
-            id: 'SUPORTE',
-            label: 'Suporte'
-          }
-        ]
-      }
-    ]
+    id: 1,
+    objectType: 1,
+    objectTranslationTag: 'portal.objecttrigger.objecttype.service_order',
+    name: 'actstatus',
+    type: 2,
+    translationTag: 'field.serviceorder.status'
   }
 ];
 
-export const WEBHOOKS_MOCK: Webhook[] = [
+/** Webhooks cadastrados (GET /portal/webhooks). */
+export const WEBHOOKS_MOCK: WebhookDTO[] = [
   {
-    id: 'wh-sms-cliente',
-    nome: 'Enviar SMS ao cliente',
-    url: 'https://api.empresa.com/rest/v1/notify/sms',
-    descricao: 'Dispara um SMS de atualização ao cliente',
-    metodo: 'POST',
-    corpoPadrao: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+    id: 1,
+    description: 'Enviar SMS ao cliente',
+    status: 2,
+    path: 'https://api.empresa.com/rest/v1/notify/sms',
+    method: 2,
+    authType: 1,
+    authParam1: null,
+    authParam2: null,
+    authParam3: null,
+    authParam4: null,
+    notes: 'Dispara um SMS de atualização ao cliente',
+    dateCreated: '2026-10-01T09:00:00.000+00:00',
+    dateUpdated: '2026-10-01T09:00:00.000+00:00'
   },
   {
-    id: 'wh-email-cliente',
-    nome: 'Enviar e-mail ao cliente',
-    url: 'https://api.empresa.com/rest/v1/notify/email',
-    descricao: 'Envia um e-mail com o resumo da OS ao cliente',
-    metodo: 'POST',
-    corpoPadrao: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+    id: 2,
+    description: 'Enviar e-mail ao cliente',
+    status: 2,
+    path: 'https://api.empresa.com/rest/v1/notify/email',
+    method: 2,
+    authType: 1,
+    authParam1: null,
+    authParam2: null,
+    authParam3: null,
+    authParam4: null,
+    notes: 'Envia um e-mail com o resumo da OS ao cliente',
+    dateCreated: '2026-10-02T09:00:00.000+00:00',
+    dateUpdated: '2026-10-02T09:00:00.000+00:00'
   },
   {
-    id: 'wh-erp-os',
-    nome: 'Atualizar OS no ERP',
-    url: 'https://erp.empresa.com/api/ordens',
-    descricao: 'Sincroniza status e valor da OS com o ERP',
-    metodo: 'PUT',
-    corpoPadrao: '{\n  "id": "{{os.id}}",\n  "status": "{{os.status}}",\n  "valor": "{{os.valor_total}}"\n}'
+    id: 3,
+    description: 'Atualizar OS no ERP',
+    status: 2,
+    path: 'https://erp.empresa.com/api/ordens',
+    method: 3,
+    authType: 3,
+    authParam1: 'token-erp-ficticio',
+    authParam2: null,
+    authParam3: null,
+    authParam4: null,
+    notes: 'Sincroniza status e valor da OS com o ERP',
+    dateCreated: '2026-10-03T09:00:00.000+00:00',
+    dateUpdated: '2026-10-03T09:00:00.000+00:00'
   },
   {
-    id: 'wh-chat-equipe',
-    nome: 'Avisar equipe no chat',
-    url: 'https://hooks.chat.empresa.com/services/equipes',
-    descricao: 'Publica uma mensagem no canal da equipe responsável',
-    metodo: 'POST',
-    corpoPadrao: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+    id: 4,
+    description: 'Avisar equipe no chat',
+    status: 2,
+    path: 'https://hooks.chat.empresa.com/services/equipes',
+    method: 2,
+    authType: 1,
+    authParam1: null,
+    authParam2: null,
+    authParam3: null,
+    authParam4: null,
+    notes: 'Publica uma mensagem no canal da equipe responsável',
+    dateCreated: '2026-10-04T09:00:00.000+00:00',
+    dateUpdated: '2026-10-04T09:00:00.000+00:00'
   }
 ];
 
-export const PLACEHOLDERS_MOCK: GrupoPlaceholder[] = [
+/** Gatilhos cadastrados, com condições e ações (como na busca com includeConditions e includeActions). */
+export const OBJECT_TRIGGERS_MOCK: ObjectTriggerDTO[] = [
   {
-    id: 'os',
-    label: 'Ordem de serviço',
-    itens: [
+    id: 1,
+    description: 'Avisar cliente quando a OS for concluída',
+    status: 2,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-13T10:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        label: 'ID da OS',
-        chave: 'os.id',
-        token: '{{os.id}}'
-      },
-      {
-        label: 'Status',
-        chave: 'os.status',
-        token: '{{os.status}}'
-      },
-      {
-        label: 'Equipe',
-        chave: 'os.equipe',
-        token: '{{os.equipe}}'
-      },
-      {
-        label: 'Data de abertura',
-        chave: 'os.data_abertura',
-        token: '{{os.data_abertura}}'
-      },
-      {
-        label: 'Data de conclusão',
-        chave: 'os.data_conclusao',
-        token: '{{os.data_conclusao}}'
-      },
-      {
-        label: 'Valor total',
-        chave: 'os.valor_total',
-        token: '{{os.valor_total}}'
-      }
-    ]
-  },
-  {
-    id: 'cliente',
-    label: 'Cliente',
-    itens: [
-      {
-        label: 'Nome',
-        chave: 'os.cliente.nome',
-        token: '{{os.cliente.nome}}'
-      },
-      {
-        label: 'Telefone',
-        chave: 'os.cliente.telefone',
-        token: '{{os.cliente.telefone}}'
-      },
-      {
-        label: 'E-mail',
-        chave: 'os.cliente.email',
-        token: '{{os.cliente.email}}'
-      },
-      {
-        label: 'Endereço',
-        chave: 'os.cliente.endereco',
-        token: '{{os.cliente.endereco}}'
-      },
-      {
-        label: 'Cidade',
-        chave: 'os.cliente.cidade',
-        token: '{{os.cliente.cidade}}'
-      }
-    ]
-  },
-  {
-    id: 'tecnico',
-    label: 'Técnico',
-    itens: [
-      {
-        label: 'Nome',
-        chave: 'os.tecnico.nome',
-        token: '{{os.tecnico.nome}}'
-      },
-      {
-        label: 'Telefone',
-        chave: 'os.tecnico.telefone',
-        token: '{{os.tecnico.telefone}}'
-      },
-      {
-        label: 'E-mail',
-        chave: 'os.tecnico.email',
-        token: '{{os.tecnico.email}}'
-      }
-    ]
-  }
-];
-
-/** Gatilhos já cadastrados: lista de gatilhos, página do gatilho e relacionamentos na aba Dados. */
-export const OBJECT_TRIGGERS_MOCK: ObjectTrigger[] = [
-  {
-    id: 'ot-001',
-    descricao: 'Avisar cliente quando a OS for concluída',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'CONCLUIDA',
-          valorFim: null
+        id: 1,
+        type: 1,
+        operator: 3,
+        value1: '7',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
         }
-      ],
-      qualquer: []
-    },
-    acoes: [
+      }
+    ],
+    actions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-sms-cliente',
-        corpo: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+        id: 1,
+        type: 1,
+        referredObjectId: 1,
+        param1: '{\n  "to": "+55 11 99999-0000",\n  "message": "Sua OS 12345 está Concluída."\n}',
+        webhook: {
+          id: 1,
+          description: 'Enviar SMS ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/sms',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Dispara um SMS de atualização ao cliente',
+          dateCreated: '2026-10-01T09:00:00.000+00:00',
+          dateUpdated: '2026-10-01T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-002',
-    descricao: 'Sincronizar OS encerrada ou paralisada com o ERP',
-    status: 'INATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ENCERRADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 2,
+    description: 'Sincronizar OS encerrada ou paralisada com o ERP',
+    status: 3,
+    notes: null,
+    dateCreated: '2026-10-13T11:20:27.000+00:00',
+    dateUpdated: '2026-10-13T11:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-erp-os',
-        corpo: '{\n  "id": "{{os.id}}",\n  "status": "{{os.status}}",\n  "valor": "{{os.valor_total}}"\n}'
+        id: 2,
+        type: 1,
+        operator: 3,
+        value1: '11',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 2,
+        type: 1,
+        referredObjectId: 3,
+        param1: '{\n  "id": "12345",\n  "status": "Concluída",\n  "valor": "350.00"\n}',
+        webhook: {
+          id: 3,
+          description: 'Atualizar OS no ERP',
+          status: 2,
+          path: 'https://erp.empresa.com/api/ordens',
+          method: 3,
+          authType: 3,
+          authParam1: 'token-erp-ficticio',
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Sincroniza status e valor da OS com o ERP',
+          dateCreated: '2026-10-03T09:00:00.000+00:00',
+          dateUpdated: '2026-10-03T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-003',
-    descricao: 'Enviar e-mail de confirmação no agendamento',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'AGENDADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 3,
+    description: 'Enviar e-mail de confirmação no agendamento',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-13T12:20:27.000+00:00',
+    dateUpdated: '2026-10-13T12:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 3,
+        type: 1,
+        operator: 3,
+        value1: '2',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 3,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-004',
-    descricao: 'Avisar equipe quando a OS entrar em aprovação',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'APROVACAO',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 4,
+    description: 'Avisar equipe quando a OS entrar em aprovação',
+    status: 1,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-14T13:20:27.000+00:00',
+    dateUpdated: '2026-10-14T13:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 4,
+        type: 1,
+        operator: 3,
+        value1: '4',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 4,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-005',
-    descricao: 'Notificar cliente sobre técnico a caminho',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'DESLOCAMENTO',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 5,
+    description: 'Notificar cliente sobre técnico a caminho',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-14T14:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-sms-cliente',
-        corpo: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+        id: 5,
+        type: 1,
+        operator: 3,
+        value1: '6',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 5,
+        type: 1,
+        referredObjectId: 1,
+        param1: '{\n  "to": "+55 11 99999-0000",\n  "message": "Sua OS 12345 está Concluída."\n}',
+        webhook: {
+          id: 1,
+          description: 'Enviar SMS ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/sms',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Dispara um SMS de atualização ao cliente',
+          dateCreated: '2026-10-01T09:00:00.000+00:00',
+          dateUpdated: '2026-10-01T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-006',
-    descricao: 'Atualizar ERP quando a OS for despachada',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'DESPACHADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 6,
+    description: 'Atualizar ERP quando a OS for despachada',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-14T15:20:27.000+00:00',
+    dateUpdated: '2026-10-14T15:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-erp-os',
-        corpo: '{\n  "id": "{{os.id}}",\n  "status": "{{os.status}}",\n  "valor": "{{os.valor_total}}"\n}'
+        id: 6,
+        type: 1,
+        operator: 3,
+        value1: '8',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 6,
+        type: 1,
+        referredObjectId: 3,
+        param1: '{\n  "id": "12345",\n  "status": "Concluída",\n  "valor": "350.00"\n}',
+        webhook: {
+          id: 3,
+          description: 'Atualizar OS no ERP',
+          status: 2,
+          path: 'https://erp.empresa.com/api/ordens',
+          method: 3,
+          authType: 3,
+          authParam1: 'token-erp-ficticio',
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Sincroniza status e valor da OS com o ERP',
+          dateCreated: '2026-10-03T09:00:00.000+00:00',
+          dateUpdated: '2026-10-03T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-007',
-    descricao: 'Alertar supervisão sobre OS paralisada',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'PARALISADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 7,
+    description: 'Alertar supervisão sobre OS paralisada',
+    status: 2,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-15T16:20:27.000+00:00',
+    dateUpdated: '2026-10-15T16:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 7,
+        type: 1,
+        operator: 3,
+        value1: '12',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 7,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-008',
-    descricao: 'Enviar pesquisa de satisfação após encerramento',
-    status: 'INATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ENCERRADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 8,
+    description: 'Enviar pesquisa de satisfação após encerramento',
+    status: 3,
+    notes: null,
+    dateCreated: '2026-10-15T17:20:27.000+00:00',
+    dateUpdated: '2026-10-15T17:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 8,
+        type: 1,
+        operator: 3,
+        value1: '11',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 8,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-009',
-    descricao: 'Avisar cliente sobre início do atendimento',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ATENDIMENTO',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 9,
+    description: 'Avisar cliente sobre início do atendimento',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-15T18:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-sms-cliente',
-        corpo: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+        id: 9,
+        type: 1,
+        operator: 3,
+        value1: '3',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 9,
+        type: 1,
+        referredObjectId: 1,
+        param1: '{\n  "to": "+55 11 99999-0000",\n  "message": "Sua OS 12345 está Concluída."\n}',
+        webhook: {
+          id: 1,
+          description: 'Enviar SMS ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/sms',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Dispara um SMS de atualização ao cliente',
+          dateCreated: '2026-10-01T09:00:00.000+00:00',
+          dateUpdated: '2026-10-01T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-010',
-    descricao: 'Registrar no ERP a abertura de nova OS',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ABERTA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 10,
+    description: 'Registrar no ERP a abertura de nova OS',
+    status: 1,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-16T19:20:27.000+00:00',
+    dateUpdated: '2026-10-16T19:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-erp-os',
-        corpo: '{\n  "id": "{{os.id}}",\n  "status": "{{os.status}}",\n  "valor": "{{os.valor_total}}"\n}'
+        id: 10,
+        type: 1,
+        operator: 3,
+        value1: '1',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 10,
+        type: 1,
+        referredObjectId: 3,
+        param1: '{\n  "id": "12345",\n  "status": "Concluída",\n  "valor": "350.00"\n}',
+        webhook: {
+          id: 3,
+          description: 'Atualizar OS no ERP',
+          status: 2,
+          path: 'https://erp.empresa.com/api/ordens',
+          method: 3,
+          authType: 3,
+          authParam1: 'token-erp-ficticio',
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Sincroniza status e valor da OS com o ERP',
+          dateCreated: '2026-10-03T09:00:00.000+00:00',
+          dateUpdated: '2026-10-03T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-011',
-    descricao: 'Notificar credenciada sobre OS vinculada',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'VINCULADA_CREDENCIADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 11,
+    description: 'Notificar credenciada sobre OS vinculada',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-16T10:20:27.000+00:00',
+    dateUpdated: '2026-10-16T10:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 11,
+        type: 1,
+        operator: 3,
+        value1: '9',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 11,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-012',
-    descricao: 'Avisar equipe de suporte sobre OS em suporte',
-    status: 'INATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'SUPORTE',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 12,
+    description: 'Avisar equipe de suporte sobre OS em suporte',
+    status: 3,
+    notes: null,
+    dateCreated: '2026-10-16T11:20:27.000+00:00',
+    dateUpdated: '2026-10-16T11:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 12,
+        type: 1,
+        operator: 3,
+        value1: '14',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 12,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-013',
-    descricao: 'Confirmar recebimento de OS pré-aberta',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'PRE_ABERTA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 13,
+    description: 'Confirmar recebimento de OS pré-aberta',
+    status: 2,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-17T12:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 13,
+        type: 1,
+        operator: 3,
+        value1: '13',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 13,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-014',
-    descricao: 'Alertar fila técnica sobre nova OS aberta fora do horário comercial e sem técnico disponível',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'FILA_TECNICO',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 14,
+    description: 'Alertar fila técnica sobre nova OS aberta fora do horário comercial e sem técnico disponível',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-17T13:20:27.000+00:00',
+    dateUpdated: '2026-10-17T13:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 14,
+        type: 1,
+        operator: 3,
+        value1: '5',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 14,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-015',
-    descricao: 'Enviar resumo da OS em análise ao gestor',
-    status: 'INATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'EM_ANALISE',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 15,
+    description: 'Enviar resumo da OS em análise ao gestor',
+    status: 3,
+    notes: null,
+    dateCreated: '2026-10-17T14:20:27.000+00:00',
+    dateUpdated: '2026-10-17T14:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 15,
+        type: 1,
+        operator: 3,
+        value1: '10',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 15,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-016',
-    descricao: 'Notificar cliente sobre reagendamento',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'AGENDADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 16,
+    description: 'Notificar cliente sobre reagendamento',
+    status: 2,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-18T15:20:27.000+00:00',
+    dateUpdated: '2026-10-18T15:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-sms-cliente',
-        corpo: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+        id: 16,
+        type: 1,
+        operator: 3,
+        value1: '2',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 16,
+        type: 1,
+        referredObjectId: 1,
+        param1: '{\n  "to": "+55 11 99999-0000",\n  "message": "Sua OS 12345 está Concluída."\n}',
+        webhook: {
+          id: 1,
+          description: 'Enviar SMS ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/sms',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Dispara um SMS de atualização ao cliente',
+          dateCreated: '2026-10-01T09:00:00.000+00:00',
+          dateUpdated: '2026-10-01T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-017',
-    descricao: 'Sincronizar valor total com o ERP na conclusão',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'CONCLUIDA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 17,
+    description: 'Sincronizar valor total com o ERP na conclusão',
+    status: 1,
+    notes: null,
+    dateCreated: '2026-10-18T16:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-erp-os',
-        corpo: '{\n  "id": "{{os.id}}",\n  "status": "{{os.status}}",\n  "valor": "{{os.valor_total}}"\n}'
+        id: 17,
+        type: 1,
+        operator: 3,
+        value1: '7',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 17,
+        type: 1,
+        referredObjectId: 3,
+        param1: '{\n  "id": "12345",\n  "status": "Concluída",\n  "valor": "350.00"\n}',
+        webhook: {
+          id: 3,
+          description: 'Atualizar OS no ERP',
+          status: 2,
+          path: 'https://erp.empresa.com/api/ordens',
+          method: 3,
+          authType: 3,
+          authParam1: 'token-erp-ficticio',
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Sincroniza status e valor da OS com o ERP',
+          dateCreated: '2026-10-03T09:00:00.000+00:00',
+          dateUpdated: '2026-10-03T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-018',
-    descricao: 'Avisar equipe sobre OS reaberta',
-    status: 'INATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ABERTA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 18,
+    description: 'Avisar equipe sobre OS reaberta',
+    status: 3,
+    notes: null,
+    dateCreated: '2026-10-18T17:20:27.000+00:00',
+    dateUpdated: '2026-10-18T17:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 18,
+        type: 1,
+        operator: 3,
+        value1: '1',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 18,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-019',
-    descricao: 'Enviar SMS de lembrete na véspera da visita',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'AGENDADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 19,
+    description: 'Enviar SMS de lembrete na véspera da visita',
+    status: 2,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-19T18:20:27.000+00:00',
+    dateUpdated: '2026-10-19T18:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-sms-cliente',
-        corpo: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+        id: 19,
+        type: 1,
+        operator: 3,
+        value1: '2',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 19,
+        type: 1,
+        referredObjectId: 1,
+        param1: '{\n  "to": "+55 11 99999-0000",\n  "message": "Sua OS 12345 está Concluída."\n}',
+        webhook: {
+          id: 1,
+          description: 'Enviar SMS ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/sms',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Dispara um SMS de atualização ao cliente',
+          dateCreated: '2026-10-01T09:00:00.000+00:00',
+          dateUpdated: '2026-10-01T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-020',
-    descricao: 'Enviar e-mail com relatório de atendimento, fotos do serviço e assinatura do cliente',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'CONCLUIDA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 20,
+    description: 'Enviar e-mail com relatório de atendimento, fotos do serviço e assinatura do cliente',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-19T19:20:27.000+00:00',
+    dateUpdated: '2026-10-19T19:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 20,
+        type: 1,
+        operator: 3,
+        value1: '7',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 20,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-021',
-    descricao: 'Alertar gestor sobre OS aguardando aprovação',
-    status: 'INATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'APROVACAO',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 21,
+    description: 'Alertar gestor sobre OS aguardando aprovação',
+    status: 3,
+    notes: null,
+    dateCreated: '2026-10-19T10:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 21,
+        type: 1,
+        operator: 3,
+        value1: '4',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 21,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-022',
-    descricao: 'Atualizar status no ERP durante o deslocamento',
-    status: 'INATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'DESLOCAMENTO',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 22,
+    description: 'Atualizar status no ERP durante o deslocamento',
+    status: 3,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-20T11:20:27.000+00:00',
+    dateUpdated: '2026-10-20T11:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-erp-os',
-        corpo: '{\n  "id": "{{os.id}}",\n  "status": "{{os.status}}",\n  "valor": "{{os.valor_total}}"\n}'
+        id: 22,
+        type: 1,
+        operator: 3,
+        value1: '6',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 22,
+        type: 1,
+        referredObjectId: 3,
+        param1: '{\n  "id": "12345",\n  "status": "Concluída",\n  "valor": "350.00"\n}',
+        webhook: {
+          id: 3,
+          description: 'Atualizar OS no ERP',
+          status: 2,
+          path: 'https://erp.empresa.com/api/ordens',
+          method: 3,
+          authType: 3,
+          authParam1: 'token-erp-ficticio',
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Sincroniza status e valor da OS com o ERP',
+          dateCreated: '2026-10-03T09:00:00.000+00:00',
+          dateUpdated: '2026-10-03T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-023',
-    descricao: 'Avisar canal da equipe sobre OS concluída',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'CONCLUIDA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 23,
+    description: 'Avisar canal da equipe sobre OS concluída',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-20T12:20:27.000+00:00',
+    dateUpdated: '2026-10-20T12:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 23,
+        type: 1,
+        operator: 3,
+        value1: '7',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 23,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-024',
-    descricao: 'Notificar cliente sobre OS em análise',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'EM_ANALISE',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 24,
+    description: 'Notificar cliente sobre OS em análise',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-20T13:20:27.000+00:00',
+    dateUpdated: '2026-10-20T13:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-sms-cliente',
-        corpo: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+        id: 24,
+        type: 1,
+        operator: 3,
+        value1: '10',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 24,
+        type: 1,
+        referredObjectId: 1,
+        param1: '{\n  "to": "+55 11 99999-0000",\n  "message": "Sua OS 12345 está Concluída."\n}',
+        webhook: {
+          id: 1,
+          description: 'Enviar SMS ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/sms',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Dispara um SMS de atualização ao cliente',
+          dateCreated: '2026-10-01T09:00:00.000+00:00',
+          dateUpdated: '2026-10-01T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-025',
-    descricao: 'Registrar encerramento da OS no ERP',
-    status: 'ATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ENCERRADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 25,
+    description: 'Registrar encerramento da OS no ERP',
+    status: 1,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-21T14:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-erp-os',
-        corpo: '{\n  "id": "{{os.id}}",\n  "status": "{{os.status}}",\n  "valor": "{{os.valor_total}}"\n}'
+        id: 25,
+        type: 1,
+        operator: 3,
+        value1: '11',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 25,
+        type: 1,
+        referredObjectId: 3,
+        param1: '{\n  "id": "12345",\n  "status": "Concluída",\n  "valor": "350.00"\n}',
+        webhook: {
+          id: 3,
+          description: 'Atualizar OS no ERP',
+          status: 2,
+          path: 'https://erp.empresa.com/api/ordens',
+          method: 3,
+          authType: 3,
+          authParam1: 'token-erp-ficticio',
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Sincroniza status e valor da OS com o ERP',
+          dateCreated: '2026-10-03T09:00:00.000+00:00',
+          dateUpdated: '2026-10-03T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-026',
-    descricao: 'Avisar cliente sobre paralisação do serviço',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'PARALISADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 26,
+    description: 'Avisar cliente sobre paralisação do serviço',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-21T15:20:27.000+00:00',
+    dateUpdated: '2026-10-21T15:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-sms-cliente',
-        corpo: '{\n  "to": "{{os.cliente.telefone}}",\n  "message": "Sua OS {{os.id}} está {{os.status}}."\n}'
+        id: 26,
+        type: 1,
+        operator: 3,
+        value1: '12',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 26,
+        type: 1,
+        referredObjectId: 1,
+        param1: '{\n  "to": "+55 11 99999-0000",\n  "message": "Sua OS 12345 está Concluída."\n}',
+        webhook: {
+          id: 1,
+          description: 'Enviar SMS ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/sms',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Dispara um SMS de atualização ao cliente',
+          dateCreated: '2026-10-01T09:00:00.000+00:00',
+          dateUpdated: '2026-10-01T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-027',
-    descricao: 'Enviar e-mail ao cliente quando a OS for aberta',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ABERTA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 27,
+    description: 'Enviar e-mail ao cliente quando a OS for aberta',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-21T16:20:27.000+00:00',
+    dateUpdated: '2026-10-21T16:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 27,
+        type: 1,
+        operator: 3,
+        value1: '1',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 27,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-028',
-    descricao: 'Alertar suporte sobre OS despachada sem técnico',
-    status: 'INATIVO',
-    observacoes: 'Usado pelo time de atendimento.',
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'DESPACHADA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 28,
+    description: 'Alertar suporte sobre OS despachada sem técnico',
+    status: 3,
+    notes: 'Usado pelo time de atendimento.',
+    dateCreated: '2026-10-22T17:20:27.000+00:00',
+    dateUpdated: '2026-10-22T17:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 28,
+        type: 1,
+        operator: 3,
+        value1: '8',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 28,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-029',
-    descricao: 'Notificar credenciada sobre conclusão da OS',
-    status: 'INATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'CONCLUIDA',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 29,
+    description: 'Notificar credenciada sobre conclusão da OS',
+    status: 3,
+    notes: null,
+    dateCreated: '2026-10-22T18:20:27.000+00:00',
+    dateUpdated: '2026-11-20T08:45:00.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-email-cliente',
-        corpo: '{\n  "to": "{{os.cliente.email}}",\n  "subject": "Atualização da OS {{os.id}}",\n  "body": "Olá, {{os.cliente.nome}}. Sua OS está {{os.status}}."\n}'
+        id: 29,
+        type: 1,
+        operator: 3,
+        value1: '7',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 29,
+        type: 1,
+        referredObjectId: 2,
+        param1: '{\n  "to": "cliente@empresa.com",\n  "subject": "Atualização da OS 12345",\n  "body": "Olá, Maria Souza. Sua OS está Concluída."\n}',
+        webhook: {
+          id: 2,
+          description: 'Enviar e-mail ao cliente',
+          status: 2,
+          path: 'https://api.empresa.com/rest/v1/notify/email',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Envia um e-mail com o resumo da OS ao cliente',
+          dateCreated: '2026-10-02T09:00:00.000+00:00',
+          dateUpdated: '2026-10-02T09:00:00.000+00:00'
+        }
       }
     ]
   },
   {
-    id: 'ot-030',
-    descricao: 'Avisar equipe quando o atendimento começar',
-    status: 'ATIVO',
-    observacoes: null,
-    condicoes: {
-      todas: [
-        {
-          categoriaId: 'os.status',
-          operador: 'IGUAL',
-          valor: 'ATENDIMENTO',
-          valorFim: null
-        }
-      ],
-      qualquer: []
-    },
-    acoes: [
+    id: 30,
+    description: 'Avisar equipe quando o atendimento começar',
+    status: 2,
+    notes: null,
+    dateCreated: '2026-10-22T19:20:27.000+00:00',
+    dateUpdated: '2026-10-22T19:20:27.000+00:00',
+    conditions: [
       {
-        tipo: 'WEBHOOK',
-        webhookId: 'wh-chat-equipe',
-        corpo: '{\n  "text": "OS {{os.id}} ({{os.equipe}}) mudou para {{os.status}}. Técnico: {{os.tecnico.nome}}."\n}'
+        id: 30,
+        type: 1,
+        operator: 3,
+        value1: '3',
+        value2: null,
+        field: {
+          id: 1,
+          objectType: 1,
+          name: 'actstatus',
+          type: 2,
+          translationTag: 'field.serviceorder.status'
+        }
+      }
+    ],
+    actions: [
+      {
+        id: 30,
+        type: 1,
+        referredObjectId: 4,
+        param1: '{\n  "text": "OS 12345 (Equipe Sul) mudou para Concluída. Técnico: João Lima."\n}',
+        webhook: {
+          id: 4,
+          description: 'Avisar equipe no chat',
+          status: 2,
+          path: 'https://hooks.chat.empresa.com/services/equipes',
+          method: 2,
+          authType: 1,
+          authParam1: null,
+          authParam2: null,
+          authParam3: null,
+          authParam4: null,
+          notes: 'Publica uma mensagem no canal da equipe responsável',
+          dateCreated: '2026-10-04T09:00:00.000+00:00',
+          dateUpdated: '2026-10-04T09:00:00.000+00:00'
+        }
       }
     ]
   }

@@ -12,21 +12,14 @@ export interface ComAlteracoesNaoSalvas {
 }
 
 /**
- * Ao sair de uma página com alterações não salvas (voltar, menu ou outro endereço), pede
- * confirmação. Os textos são genéricos, para qualquer página reaproveitar.
- * Recarregar ou fechar a aba é tratado pela própria página, com o aviso nativo do navegador.
+ * Abre a confirmação genérica de descarte ("Descartar alterações") e resolve com `true` se o
+ * usuário escolher "Descartar". Usada pelo guard e por botões como "Cancelar" de uma edição.
  */
-export const alteracoesNaoSalvasGuard: CanDeactivateFn<ComAlteracoesNaoSalvas> = pagina => {
-  if (!pagina?.temAlteracoesNaoSalvas()) {
-    return true;
-  }
-  const confirmacao = inject(ConfirmationService);
-  const translate = inject(TranslateService);
+export function confirmarDescarte(confirmacao: ConfirmationService, translate: TranslateService): Promise<boolean> {
   return new Promise<boolean>(resolver =>
     confirmacao.confirm({
       header: translate.instant('iclass.generic.label.discard-changes'),
       message: translate.instant('portal.generic.label.unsaved-changes-will-be-lost'),
-      icon: 'pi pi-exclamation-triangle',
       acceptLabel: translate.instant('portal.generic.button.discard'),
       rejectLabel: translate.instant('portal.generic.label.no-keep-editing'),
       acceptIcon: 'none',
@@ -39,4 +32,16 @@ export const alteracoesNaoSalvasGuard: CanDeactivateFn<ComAlteracoesNaoSalvas> =
       reject: () => resolver(false)
     })
   );
+}
+
+/**
+ * Ao sair de uma página com alterações não salvas (voltar, menu ou outro endereço), pede
+ * confirmação. Os textos são genéricos, para qualquer página reaproveitar.
+ * Recarregar ou fechar a aba é tratado pela própria página, com o aviso nativo do navegador.
+ */
+export const alteracoesNaoSalvasGuard: CanDeactivateFn<ComAlteracoesNaoSalvas> = pagina => {
+  if (!pagina?.temAlteracoesNaoSalvas()) {
+    return true;
+  }
+  return confirmarDescarte(inject(ConfirmationService), inject(TranslateService));
 };

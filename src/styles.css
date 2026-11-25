@@ -1317,6 +1317,12 @@ body {
     color: #374151;
 }
 
+.chips-container-yellow .p-chip {
+    font-size: 12px;
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
 .underline-button .p-button-label {
     text-decoration: underline;
 }
@@ -2870,4 +2876,9 @@ body {
   font-family: var(--font-family);
   background: var(--surface-ground);
   color: var(--text-color);
+}
+
+/* Confirmação genérica (p-confirmDialog da raiz): sem ícone, a mensagem fica alinhada ao título */
+.confirmacao-generica .p-confirm-dialog-message {
+  margin-left: 0;
 }

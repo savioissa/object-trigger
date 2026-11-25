@@ -1,9 +1,0 @@
-:host {
-  display: block;
-}
-
-/* Painel de placeholders: fica logo abaixo do cabeçalho fixo da página
-   (cada página define --cabecalho-altura); a posição sticky vem do PrimeFlex */
-.acoes__painel {
-  top: calc(var(--cabecalho-altura, 65px) + 16px);
-}

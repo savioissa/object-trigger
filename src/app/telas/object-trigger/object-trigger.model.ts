@@ -1,8 +1,10 @@
-export type StatusObjectTrigger = 'ATIVO' | 'INATIVO';
-export const STATUS_OBJECT_TRIGGER: StatusObjectTrigger[] = ['ATIVO', 'INATIVO'];
+/** Status do gatilho, na ordem do enum ObjectTriggerStatus: EDITING (1), ACTIVE (2), INACTIVE (3). */
+export type StatusObjectTrigger = 'EM_EDICAO' | 'ATIVO' | 'INATIVO';
+export const STATUS_OBJECT_TRIGGER: StatusObjectTrigger[] = ['EM_EDICAO', 'ATIVO', 'INATIVO'];
 
 /** Tag de tradução de cada status. */
 export const TAG_STATUS: Record<StatusObjectTrigger, string> = {
+  EM_EDICAO: 'portal.generic.label.in-edit',
   ATIVO: 'portal.generic.label.active',
   INATIVO: 'portal.generic.label.inactive'
 };
@@ -98,20 +100,6 @@ export interface Webhook {
   metodo: MetodoHttp;
   /** Corpo sugerido, copiado para a ação quando o webhook é escolhido. */
   corpoPadrao: string;
-}
-
-export interface Placeholder {
-  label: string;
-  /** Caminho do dado, ex.: "os.id". */
-  chave: string;
-  /** Texto a usar no corpo, ex.: "{{os.id}}". */
-  token: string;
-}
-
-export interface GrupoPlaceholder {
-  id: string;
-  label: string;
-  itens: Placeholder[];
 }
 
 /** Valor de condição no payload: datas vão como "AAAA-MM-DD". */

@@ -14,7 +14,6 @@
     "generic": {
       "label": {
         "between": "Entre",
-        "copied-to-clipboard": "Copiado al portapapeles",
         "description": "Descripción",
         "discard-changes": "Descartar cambios",
         "from": "De",
@@ -77,12 +76,10 @@
         "all-conditions-satisfied": "Todas las condiciones deben ser satisfechas",
         "any-condition-satisfied": "Cualquier condición debe ser satisfecha.",
         "ascending": "Ascendente",
-        "available-placeholders": "Placeholders disponibles",
         "category": "Categoría",
+        "clean-filters": "Borrar filtros",
         "conditions": "Condiciones",
         "conditions-set-trigger-execution": "Las condiciones determinan cuándo debe ejecutarse un disparador",
-        "copied": "Copiado",
-        "copy-placeholder-manually": "Seleccione el código del placeholder y cópielo manualmente.",
         "define-trigger-actions": "Qué sucede cuando se cumplen las condiciones.",
         "descending": "Descendente",
         "empty-trigger-list": "Ningún disparador registrado",
@@ -111,6 +108,7 @@
         "request-body-json": "Cuerpo de la solicitud (JSON)",
         "required-field": "Campo obligatorio.",
         "select": "Elegir",
+        "selected-filters": "Filtros Seleccionados",
         "sort-by": "Ordenar por",
         "status": "Estado",
         "trigger": "Disparador",
@@ -122,11 +120,10 @@
         "unable-load-form-options": "No fue posible cargar las opciones del formulario.",
         "unable-load-triggers": "No fue posible cargar los disparadores. Por favor, inténtelo de nuevo.",
         "unable-save-trigger": "No fue posible guardar el disparador. Inténtelo de nuevo.",
-        "unable-to-copy": "No fue posible copiar",
         "unsaved-changes-will-be-lost": "Hay cambios sin guardar. Si sale ahora, se perderán.",
         "url": "URL",
         "value": "Valor",
-        "view-available-placeholders": "Ver placeholders disponibles"
+        "in-edit": "En edición"
       },
       "placeholder": {
         "number-value": "0",

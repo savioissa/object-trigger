@@ -1,34 +1,61 @@
-<div class="div-filter">
-  <div class="grid">
-    <div class="col-6 flex flex-column gap-1">
-      <label class="filter-panel__label" [for]="uid + '-descricao'">{{ 'iclass.generic.label.description' | translate }}</label>
-      <input
-        pInputText
-        type="text"
-        class="filter-panel__input w-full"
-        [id]="uid + '-descricao'"
-        [ngModel]="filtro.descricao"
-        (ngModelChange)="aoMudarDescricao($event)"
-        [placeholder]="'portal.generic.placeholder.search' | translate"
-      />
-    </div>
+<div class="div-filter flex flex-column gap-2">
+  @if (aberto) {
+    <div class="grid">
+      <div class="col-6 flex flex-column gap-1">
+        <label class="filter-panel__label" [for]="uid + '-descricao'">{{ 'iclass.generic.label.description' | translate }}</label>
+        <input
+          pInputText
+          type="text"
+          class="filter-panel__input w-full"
+          [id]="uid + '-descricao'"
+          [ngModel]="filtro.descricao"
+          (ngModelChange)="aoMudarDescricao($event)"
+          [placeholder]="'portal.generic.placeholder.search' | translate"
+        />
+      </div>
 
-    <div class="col-6 flex flex-column gap-1">
-      <label class="filter-panel__label" [for]="uid + '-status'">{{ 'portal.generic.label.status' | translate }}</label>
-      <p-dropdown
-        class="filter-panel__operator"
-        [inputId]="uid + '-status'"
-        [options]="statusOpcoes"
-        [ngModel]="filtro.status"
-        (ngModelChange)="aoMudarStatus($event)"
-        [showClear]="true"
-        appendTo="body"
-        panelStyleClass="filter-panel__operator-panel"
-        [placeholder]="'portal.generic.label.select' | translate"
-      >
-        <ng-template pTemplate="selectedItem" let-status>{{ tagStatus[status] | translate }}</ng-template>
-        <ng-template pTemplate="item" let-status>{{ tagStatus[status] | translate }}</ng-template>
-      </p-dropdown>
+      <div class="col-6 flex flex-column gap-1">
+        <label class="filter-panel__label" [for]="uid + '-status'">{{ 'portal.generic.label.status' | translate }}</label>
+        <p-dropdown
+          class="filter-panel__operator"
+          [inputId]="uid + '-status'"
+          [options]="statusOpcoes"
+          [ngModel]="filtro.status"
+          (ngModelChange)="aoMudarStatus($event)"
+          [showClear]="true"
+          appendTo="body"
+          panelStyleClass="filter-panel__operator-panel"
+          [placeholder]="'portal.generic.label.select' | translate"
+        >
+          <ng-template pTemplate="selectedItem" let-status>{{ tagStatus[status] | translate }}</ng-template>
+          <ng-template pTemplate="item" let-status>{{ tagStatus[status] | translate }}</ng-template>
+        </p-dropdown>
+      </div>
     </div>
-  </div>
+  }
+
+  <!-- Filtros selecionados: um chip por campo preenchido -->
+  @if (chips.length) {
+    <div class="flex align-items-center justify-content-between gap-3">
+      <div class="flex align-items-center flex-wrap gap-2 min-w-0">
+        <span class="filter-label">{{ 'portal.generic.label.selected-filters' | translate }}</span>
+        @for (chip of chips; track chip.campo) {
+          <p-chip
+            class="chips-container"
+            [label]="(chip.rotulo | translate) + ': ' + (chip.valorTraduzivel ? (chip.valor | translate) : chip.valor)"
+            [removable]="true"
+            removeIcon="pi pi-times-circle"
+            (onRemove)="remover(chip.campo)"
+          />
+        }
+      </div>
+      <button
+        pButton
+        type="button"
+        class="customer-portal-button-negative flex-shrink-0"
+        [label]="'portal.generic.label.clean-filters' | translate"
+        (click)="limpar()"
+      ></button>
+    </div>
+  }
 </div>

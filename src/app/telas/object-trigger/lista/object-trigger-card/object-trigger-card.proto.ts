@@ -1,14 +1,18 @@
 import { ajustar } from '../../../../prototipador/teste/ajustar';
+import { deObjectTriggerDTO } from '../../object-trigger.conversao';
 import { OBJECT_TRIGGERS_MOCK } from '../../object-trigger.mock';
 import { ObjectTriggerCardComponent } from './object-trigger-card.component';
 
+/** Mocks da API no modelo da tela. */
+const gatilho = (indice: number) => deObjectTriggerDTO(OBJECT_TRIGGERS_MOCK[indice]);
+
 export default ajustar(ObjectTriggerCardComponent, {
   variacoes: {
-    'Ativo': { gatilho: OBJECT_TRIGGERS_MOCK[0] },
-    'Inativo': { gatilho: OBJECT_TRIGGERS_MOCK[1] },
+    'Ativo': { gatilho: gatilho(0) },
+    'Inativo': { gatilho: gatilho(1) },
     'Descrição longa': {
       gatilho: {
-        ...OBJECT_TRIGGERS_MOCK[2],
+        ...gatilho(2),
         descricao:
           'Enviar e-mail de confirmação ao cliente e avisar a equipe responsável sempre que a ordem de serviço for agendada, reagendada ou tiver o técnico alterado'
       }

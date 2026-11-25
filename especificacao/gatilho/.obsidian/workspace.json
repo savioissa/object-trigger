@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "home/app-object-trigger-home.md",
+                "file": "form/conditions/app-object-trigger-category.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "app-object-trigger-home"
+              "title": "app-object-trigger-category"
             }
           }
         ]
@@ -190,30 +190,41 @@
   },
   "active": "b84e6a2db985dc4a",
   "lastOpenFiles": [
+    "home/app-object-trigger-home.md",
+    "form/README.md",
+    "README.md",
+    "form/conditions/app-object-trigger-category.md",
+    "traducoes.md",
+    "form/app-object-trigger-form.md",
+    "create/app-object-trigger-create.md",
+    "list/app-object-trigger-card.md",
+    "form/conditions/app-object-trigger-condition-group.md",
+    "sedvKyyJZ",
+    "sedh9tIq9",
+    "form/actions/app-object-trigger-json-editor.md",
+    "form/actions/app-object-trigger-action.md",
+    "form/actions/app-object-trigger-action-group.md",
+    "form/conditions/app-object-trigger-condition.md",
+    "form/conditions",
+    "form/actions",
+    "condition-group/app-object-trigger-condition-group.md",
+    "condition/app-object-trigger-condition.md",
+    "condition/app-object-trigger-category.md",
+    "lista/app-object-trigger-list.md",
+    "lista/app-object-trigger-filter.md",
+    "lista/app-object-trigger-card.md",
+    "lista/README.md",
+    "criacao/app-object-trigger-condition-group.md",
+    "criacao/app-object-trigger-fields.md",
+    "criacao/app-object-trigger-form.md",
+    "criacao/app-object-trigger-json-editor.md",
+    "criacao/app-object-trigger-action.md",
     "criacao/app-object-trigger-placeholders-panel.md",
     "lista/VgH6gu3P",
     "criacao/hI5fHFR2",
-    "criacao/app-object-trigger-json-editor.md",
-    "criacao/app-object-trigger-form.md",
-    "criacao/app-object-trigger-fields.md",
     "README.md.tmp.27656.991799419ca7",
     "traducoes.md.tmp.27656.64c1d256b8cc",
     "tRQNufA2",
-    "gj0SNGoy",
-    "criacao/app-object-trigger-condition-group.md.tmp.27656.c4d2c3077ff3",
-    "criacao/app-object-trigger-condition-group.md.tmp.27656.fe1e17e0b46f",
-    "criacao/app-object-trigger-condition-group.md",
-    "criacao/app-object-trigger-action.md",
-    "home/app-object-trigger-home.md",
-    "lista/app-object-trigger-card.md",
-    "traducoes.md",
-    "lista/app-object-trigger-list.md",
-    "lista/app-object-trigger-filter.md",
-    "lista/app-object-trigger-filter.md.tmp.27656.03fcddf27a39",
-    "lista/app-object-trigger-card.md.tmp.27656.aa3c58fa48bf",
-    "lista/README.md",
-    "css-global.md",
-    "README.md",
-    "home/README.md"
+    "gj0SNGoy"
   ]
 }

@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, OnInit, i
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
-import { Observable, catchError, finalize, forkJoin, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, finalize, forkJoin, map, of, switchMap, tap } from 'rxjs';
 
-import { GrupoCategoria, GrupoPlaceholder, ObjectTrigger, Webhook } from '../../object-trigger.model';
+import { GrupoCategoria, ObjectTrigger, Webhook } from '../../object-trigger.model';
 import {
   criarObjectTriggerForm,
   definirSomenteLeitura,
@@ -17,8 +17,9 @@ import {
   retratoObjectTrigger
 } from '../../object-trigger-form.factory';
 import { ObjectTriggerService } from '../../object-trigger.service';
-import { ObjectTriggerFieldsComponent } from '../../compartilhado/object-trigger-fields/object-trigger-fields.component';
-import { ComAlteracoesNaoSalvas } from '../../../compartilhado/alteracoes-nao-salvas/alteracoes-nao-salvas.guard';
+import { deCamposDTO, deObjectTriggerDTO, deWebhookDTO, paraObjectTriggerDTO } from '../../object-trigger.conversao';
+import { ObjectTriggerFormComponent } from '../../create/object-trigger-form/object-trigger-form.component';
+import { ComAlteracoesNaoSalvas, confirmarDescarte } from '../../../compartilhado/alteracoes-nao-salvas/alteracoes-nao-salvas.guard';
 
 /**
  * Página do gatilho: o mesmo formulário do cadastro, em somente leitura.
@@ -28,7 +29,7 @@ import { ComAlteracoesNaoSalvas } from '../../../compartilhado/alteracoes-nao-sa
   selector: 'app-object-trigger-home',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.Default,
-  imports: [RouterLink, TranslateModule, ButtonModule, SkeletonModule, ObjectTriggerFieldsComponent],
+  imports: [RouterLink, TranslateModule, ButtonModule, SkeletonModule, ObjectTriggerFormComponent],
   templateUrl: './object-trigger-home.component.html',
   styleUrl: './object-trigger-home.component.css'
 })
@@ -36,6 +37,7 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
   private readonly route = inject(ActivatedRoute);
   private readonly service = inject(ObjectTriggerService);
   private readonly messages = inject(MessageService);
+  private readonly confirmacao = inject(ConfirmationService);
   private readonly translate = inject(TranslateService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -45,7 +47,6 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
   protected gatilho: ObjectTrigger | null = null;
   protected categorias: GrupoCategoria[] = [];
   protected webhooks: Webhook[] = [];
-  protected placeholders: GrupoPlaceholder[] = [];
 
   protected carregando = true;
   protected editando = false;
@@ -82,7 +83,10 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
         }),
         switchMap(params =>
           forkJoin({
-            gatilho: this.service.buscar(params.get('id') ?? '').pipe(catchError(() => of(null))),
+            gatilho: this.service.buscar(Number(params.get('id'))).pipe(
+              map(deObjectTriggerDTO),
+              catchError(() => of(null))
+            ),
             opcoes: this.carregarOpcoes()
           }).pipe(finalize(() => (this.carregando = false)))
         ),
@@ -91,7 +95,6 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
       .subscribe(({ gatilho, opcoes }) => {
         this.categorias = opcoes.categorias;
         this.webhooks = opcoes.webhooks;
-        this.placeholders = opcoes.placeholders;
         this.exibirSalvo(gatilho);
       });
   }
@@ -105,8 +108,14 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
     definirSomenteLeitura(this.form, false);
   }
 
-  /** Descarta as alterações, sem confirmação, e volta para a leitura. */
-  protected cancelar(): void {
+  /**
+   * Descarta as alterações e volta para a leitura. Com alguma alteração, antes pede
+   * confirmação ("Descartar alterações"); sem alteração, volta direto.
+   */
+  protected async cancelar(): Promise<void> {
+    if (this.temAlteracoesNaoSalvas() && !(await confirmarDescarte(this.confirmacao, this.translate))) {
+      return;
+    }
     this.exibirSalvo(this.gatilho);
   }
 
@@ -116,8 +125,11 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
     }
     this.salvando = true;
     this.service
-      .atualizar({ ...paraObjectTrigger(this.form), id: this.gatilho.id })
-      .pipe(finalize(() => (this.salvando = false)))
+      .atualizar(paraObjectTriggerDTO({ ...paraObjectTrigger(this.form), id: this.gatilho.id }))
+      .pipe(
+        map(deObjectTriggerDTO),
+        finalize(() => (this.salvando = false))
+      )
       .subscribe({
         next: salvo => {
           this.exibirSalvo(salvo);
@@ -146,12 +158,11 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
     definirSomenteLeitura(this.form, true);
   }
 
-  /** Categorias, webhooks e placeholders; se algum falhar, a página abre sem eles e avisa por toast. */
-  private carregarOpcoes(): Observable<{ categorias: GrupoCategoria[]; webhooks: Webhook[]; placeholders: GrupoPlaceholder[] }> {
+  /** Categorias e webhooks; se algum falhar, a página abre sem eles e avisa por toast. */
+  private carregarOpcoes(): Observable<{ categorias: GrupoCategoria[]; webhooks: Webhook[] }> {
     return forkJoin({
-      categorias: this.service.listarCategorias(),
-      webhooks: this.service.listarWebhooks(),
-      placeholders: this.service.listarPlaceholders()
+      categorias: this.service.listarCampos().pipe(map(deCamposDTO)),
+      webhooks: this.service.listarWebhooks().pipe(map(lista => lista.map(deWebhookDTO)))
     }).pipe(
       catchError(() => {
         this.messages.add({
@@ -159,7 +170,7 @@ export class ObjectTriggerHomeComponent implements OnInit, ComAlteracoesNaoSalva
           summary: this.translate.instant('portal.generic.label.error-loading-data'),
           detail: this.translate.instant('portal.generic.label.unable-load-form-options')
         });
-        return of({ categorias: [], webhooks: [], placeholders: [] });
+        return of({ categorias: [], webhooks: [] });
       })
     );
   }

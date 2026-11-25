@@ -8,12 +8,13 @@ import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SkeletonModule } from 'primeng/skeleton';
-import { finalize } from 'rxjs';
+import { finalize, map } from 'rxjs';
 
-import { ObjectTrigger } from '../../object-trigger.model';
+import { ObjectTrigger, STATUS_OBJECT_TRIGGER } from '../../object-trigger.model';
 import { ObjectTriggerService } from '../../object-trigger.service';
+import { deObjectTriggerDTO } from '../../object-trigger.conversao';
 import { ObjectTriggerCardComponent } from '../object-trigger-card/object-trigger-card.component';
-import { FILTRO_VAZIO, FiltroObjectTrigger, ObjectTriggerFilterComponent } from '../object-trigger-filter/object-trigger-filter.component';
+import { FILTRO_VAZIO, FiltroObjectTrigger, ObjectTriggerFilterComponent, filtroPreenchido } from '../object-trigger-filter/object-trigger-filter.component';
 
 export type CampoOrdenacao = 'descricao' | 'status';
 export type DirecaoOrdenacao = 'asc' | 'desc';
@@ -77,7 +78,10 @@ export class ObjectTriggerListComponent implements OnInit {
   protected filtrosAbertos = false;
   protected ordenacaoAberta = false;
 
-  protected filtro: FiltroObjectTrigger = FILTRO_VAZIO;
+  /** O que está preenchido no painel de filtro (vira chip); só vale para a lista depois do "Atualizar". */
+  protected rascunho: FiltroObjectTrigger = FILTRO_VAZIO;
+  /** O filtro que a lista está usando. */
+  protected filtroAplicado: FiltroObjectTrigger = FILTRO_VAZIO;
   protected campoOrdenacao: CampoOrdenacao = 'descricao';
   protected direcaoOrdenacao: DirecaoOrdenacao = 'asc';
 
@@ -88,12 +92,22 @@ export class ObjectTriggerListComponent implements OnInit {
     this.carregar();
   }
 
-  /** Busca a lista; também usado pelo botão "Atualizar". */
+  /** "Atualizar": aplica o que está preenchido no filtro e busca a lista de novo. */
+  protected atualizar(): void {
+    if (JSON.stringify(this.rascunho) !== JSON.stringify(this.filtroAplicado)) {
+      this.filtroAplicado = this.rascunho;
+      this.primeiro = 0;
+    }
+    this.carregar();
+  }
+
+  /** Busca a lista. */
   protected carregar(): void {
     this.carregando = true;
     this.service
       .listar()
       .pipe(
+        map(lista => lista.map(deObjectTriggerDTO)),
         finalize(() => (this.carregando = false)),
         takeUntilDestroyed(this.destroyRef)
       )
@@ -115,12 +129,20 @@ export class ObjectTriggerListComponent implements OnInit {
 
   /** Gatilhos que passam pelos filtros, na ordem escolhida. */
   protected get filtrados(): ObjectTrigger[] {
-    const busca = normalizar(this.filtro.descricao.trim());
+    const busca = normalizar(this.filtroAplicado.descricao.trim());
     const sinal = this.direcaoOrdenacao === 'asc' ? 1 : -1;
     return this.gatilhos
       .filter(g => !busca || normalizar(g.descricao).includes(busca))
-      .filter(g => this.filtro.status == null || g.status === this.filtro.status)
-      .sort((a, b) => sinal * a[this.campoOrdenacao].localeCompare(b[this.campoOrdenacao], 'pt'));
+      .filter(g => this.filtroAplicado.status == null || g.status === this.filtroAplicado.status)
+      .sort((a, b) => sinal * this.comparar(a, b));
+  }
+
+  /** Descrição em ordem alfabética; Status na ordem do enum (Em edição, Ativo, Inativo). */
+  private comparar(a: ObjectTrigger, b: ObjectTrigger): number {
+    if (this.campoOrdenacao === 'status') {
+      return STATUS_OBJECT_TRIGGER.indexOf(a.status) - STATUS_OBJECT_TRIGGER.indexOf(b.status);
+    }
+    return a.descricao.localeCompare(b.descricao, 'pt');
   }
 
   /** Cards da página atual. */
@@ -128,8 +150,9 @@ export class ObjectTriggerListComponent implements OnInit {
     return this.filtrados.slice(this.primeiro, this.primeiro + this.porPagina);
   }
 
-  protected get temFiltro(): boolean {
-    return this.filtro.descricao.trim() !== '' || this.filtro.status != null;
+  /** Há filtro preenchido: a linha de "Filtros selecionados" aparece mesmo com o painel fechado. */
+  protected get temFiltroPreenchido(): boolean {
+    return filtroPreenchido(this.rascunho);
   }
 
   protected alternarFiltros(): void {
@@ -140,9 +163,15 @@ export class ObjectTriggerListComponent implements OnInit {
     this.ordenacaoAberta = !this.ordenacaoAberta;
   }
 
-  /** O painel de filtro emitiu um novo filtro: aplica e volta para a primeira página. */
+  /** Campo do filtro preenchido ou alterado: vira chip, mas só vale para a lista no "Atualizar". */
   protected aoMudarFiltro(filtro: FiltroObjectTrigger): void {
-    this.filtro = filtro;
+    this.rascunho = filtro;
+  }
+
+  /** Chip removido ou "Limpar filtros": aplica na hora e volta para a primeira página. */
+  protected aoAplicarFiltro(filtro: FiltroObjectTrigger): void {
+    this.rascunho = filtro;
+    this.filtroAplicado = filtro;
     this.primeiro = 0;
   }
 

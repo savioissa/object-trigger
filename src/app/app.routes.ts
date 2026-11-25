@@ -19,14 +19,14 @@ export const rotasDasTelas: Routes = [
       ),
   },
   {
-    path: 'object-trigger/novo',
+    path: 'object-trigger/register',
     loadComponent: () =>
-      import('./telas/object-trigger/criacao/object-trigger-form/object-trigger-form.component').then(
-        (m) => m.ObjectTriggerFormComponent,
+      import('./telas/object-trigger/create/object-trigger-create/object-trigger-create.component').then(
+        (m) => m.ObjectTriggerCreateComponent,
       ),
   },
   {
-    path: 'object-trigger/:id',
+    path: 'object-trigger/:id/home',
     canDeactivate: [alteracoesNaoSalvasGuard],
     loadComponent: () =>
       import('./telas/object-trigger/home/object-trigger-home/object-trigger-home.component').then(

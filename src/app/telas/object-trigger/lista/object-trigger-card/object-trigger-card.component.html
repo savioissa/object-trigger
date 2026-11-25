@@ -1,23 +1,26 @@
-<div class="reg-card flex align-items-center gap-3 px-3 py-2">
-  <div class="w-16rem flex-shrink-0 flex">
+<div class="reg-card grid grid-nogutter gap-0 align-items-center px-3 py-2">
+  <div class="col-3 flex pr-3">
     <p-chip
+      [class.chips-container-yellow]="gatilho.status === 'EM_EDICAO'"
       [class.chips-container]="gatilho.status === 'ATIVO'"
       [class.chips-container-gray]="gatilho.status === 'INATIVO'"
       [label]="tagStatus[gatilho.status] | translate"
     />
   </div>
 
-  <div class="flex-1 min-w-0 flex flex-column gap-1">
+  <div class="col-8 min-w-0 flex flex-column gap-1">
     <span class="card-label">{{ 'iclass.generic.label.description' | translate }}</span>
     <span class="card-input overflow-hidden text-overflow-ellipsis white-space-nowrap">{{ descricao }}</span>
   </div>
 
   <!-- Só o botão "Abrir" leva à página do gatilho -->
-  <a
-    class="cartao__abrir flex flex-shrink-0 align-items-center justify-content-center w-2rem h-2rem border-round-sm text-base no-underline cursor-pointer"
-    [routerLink]="['/object-trigger', gatilho.id]"
-    [attr.aria-label]="gatilho.descricao"
-  >
-    <span class="pi pi-window-maximize" aria-hidden="true"></span>
-  </a>
+  <div class="col-1 flex justify-content-end">
+    <a
+      class="cartao__abrir flex flex-shrink-0 align-items-center justify-content-center w-2rem h-2rem border-round-sm text-base no-underline cursor-pointer"
+      [routerLink]="['/object-trigger', gatilho.id, 'home']"
+      [attr.aria-label]="gatilho.descricao"
+    >
+      <span class="pi pi-window-maximize" aria-hidden="true"></span>
+    </a>
+  </div>
 </div>

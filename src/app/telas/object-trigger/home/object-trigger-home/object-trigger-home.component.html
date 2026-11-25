@@ -55,11 +55,10 @@
     <span>{{ 'portal.generic.results-not-found' | translate }}</span>
   </div>
 } @else {
-  <app-object-trigger-fields
+  <app-object-trigger-form
     [form]="form"
     [categorias]="categorias"
     [webhooks]="webhooks"
-    [placeholders]="placeholders"
     [carregando]="carregando"
     [somenteLeitura]="!editando"
   />
